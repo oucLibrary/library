@@ -23,7 +23,7 @@ string DbDemo::GetName(){
     return str;
 }
 void DbDemo::SetName(string a1){
-    for(int i=0;i<a1.length();i++){
+    for(int i=0;i<(int)a1.length();i++){
         name[i]=a1[i];
     }
     name[a1.length()]=0;
@@ -31,6 +31,7 @@ void DbDemo::SetName(string a1){
 //DbDemoFileOperate方法
 DbDemoFileOperate::DbDemoFileOperate(){
 }
-DbDemoFileOperate::DbDemoFileOperate(string fileName){
-
+DbDemoFileOperate::DbDemoFileOperate(char *fileName){
+    if((filetp = fopen(fileName, "rw")) == NULL)
+        exit(0);
 }

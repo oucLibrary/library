@@ -30,7 +30,7 @@ public:
 
 class DbDemoFileOperate{
 public:
-    DbDemoFileOperate(string fileName); //实例化一类，打开一个文件名为fileName 的文件
+    DbDemoFileOperate(char *fileName); //实例化一类，打开一个文件名为fileName 的文件
     DbDemoFileOperate();  //无特定意义
     void FileWrite(DbDemo);    //文件写入
     void QueryById(int,bool);  //通过id查询,bool变量表示是否二次搜索
