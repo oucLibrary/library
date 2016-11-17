@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../oucLibrary -I. -I/opt/Qt5.5.1/5.5/gcc_64/include -I/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets -I/opt/Qt5.5.1/5.5/gcc_64/include/QtGui -I/opt/Qt5.5.1/5.5/gcc_64/include/QtCore -I. -I. -I/opt/Qt5.5.1/5.5/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../oucLibrary -I. -I/opt/Qt5.5.1/5.5/gcc_64/include -I/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets -I/opt/Qt5.5.1/5.5/gcc_64/include/QtGui -I/opt/Qt5.5.1/5.5/gcc_64/include/QtCore -I. -I/opt/Qt5.5.1/5.5/gcc_64/mkspecs/linux-g++
 QMAKE         = /opt/Qt5.5.1/5.5/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -220,7 +220,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): ui_widget.h $(OBJECTS)  
+$(TARGET):  $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../oucLibrary/oucLibrary.pro /opt/Qt5.5.1/5.5/gcc_64/mkspecs/linux-g++/qmake.conf /opt/Qt5.5.1/5.5/gcc_64/mkspecs/features/spec_pre.prf \
@@ -516,7 +516,6 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../oucLibrary/widget.h ../oucLibrary/dbdemo.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../oucLibrary/main.cpp ../oucLibrary/widget.cpp ../oucLibrary/dbdemo.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../oucLibrary/widget.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -649,19 +648,15 @@ moc_widget.cpp: /opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QWidget \
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_widget.h
+compiler_uic_make_all:
 compiler_uic_clean:
-	-$(DEL_FILE) ui_widget.h
-ui_widget.h: ../oucLibrary/widget.ui
-	/opt/Qt5.5.1/5.5/gcc_64/bin/uic ../oucLibrary/widget.ui -o ui_widget.h
-
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_moc_header_clean 
 
 ####### Compile
 
@@ -880,7 +875,39 @@ widget.o: ../oucLibrary/widget.cpp ../oucLibrary/widget.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qfiledevice.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qvector2d.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qtouchdevice.h \
-		ui_widget.h
+		ui_widget.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qrubberband.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o widget.o ../oucLibrary/widget.cpp
 
 dbdemo.o: ../oucLibrary/dbdemo.cpp ../oucLibrary/dbdemo.h

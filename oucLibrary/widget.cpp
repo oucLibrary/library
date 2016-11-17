@@ -1,14 +1,12 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include "dbdemo.h"
 
 Widget::Widget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Widget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
 }
 
 Widget::~Widget()
 {
-    delete ui;
 }

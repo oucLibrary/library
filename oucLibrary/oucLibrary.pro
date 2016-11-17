@@ -19,4 +19,4 @@ SOURCES += main.cpp\
 HEADERS  += widget.h \
     dbdemo.h
 
-FORMS    += widget.ui
+FORMS    +=
