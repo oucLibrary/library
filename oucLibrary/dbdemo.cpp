@@ -72,4 +72,40 @@ void DbDemoFileOperate::QueryById(int id,bool ok)           //ok=false往第一�
     cache.write((char *)(&cache_id),sizeof(int));
     cache.close();
 }
-void DbDemoFileOperate::QueryByName(string, bool)
+void DbDemoFileOperate::QueryByName(char name[50], bool ok)
+{
+    char buffer[fileLen];
+    char tmp_name[50];
+    fstream cache;
+    if(ok)
+        cache.open("1.dat",ios::out);
+    else cache.open("2.dat",ios::out);
+    int cache_id=0;
+    cache.write((char *)(&cache_id),sizeof(int));
+    cache.write((char *)(&fileLen),sizeof(int));
+    file.seekp(2*sizeof(int), ios::beg);
+    int curr_id;
+    int pos=2*sizeof(int);
+    file.read((char*)(&curr_id),sizeof(int));
+    while(file.read(tmp_name,sizeof(char)*50))
+    {
+        if(strcmp(tmp_name,name)==0)
+        {
+            file.read(buffer,fileLen-sizeof(int)-50*sizeof(char));
+            cache.write((char*)(&cache_id),sizeof(int));
+            cache_id++;
+            cache.write(name,sizeof(char)*50);
+            cache.write(buffer,fileLen-sizeof(int)-50*sizeof(char));
+        }
+        else
+            file.read(buffer,fileLen-sizeof(char)*50);
+        pos+=fileLen;
+    }
+    cache.seekp(0,ios::beg);
+    cache.write((char *)(&cache_id),sizeof(int));
+    cache.close();
+}
+int GetCount(bool ok)
+{
+
+}
