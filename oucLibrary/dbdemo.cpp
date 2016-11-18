@@ -72,4 +72,4 @@ void DbDemoFileOperate::QueryById(int id,bool ok)           //ok=false往第一�
     cache.write((char *)(&cache_id),sizeof(int));
     cache.close();
 }
-void DbDemoFileOperate::QueryByName(string, bool)
+void DbDemoFileOperate::QueryByName(char name[50], bool ok)
