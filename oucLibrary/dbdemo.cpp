@@ -42,7 +42,7 @@ void DbDemoFileOperate::FileWrite(DbDemo *demo,int pos)      //写入第pos条�
         file.seekp(pos*fileLen+2*sizeof(int), ios::beg);
     file.write((char *)(demo),fileLen);
 }
-void DbDemoFileOperate::QueryById(int id,bool ok)           //ok=false往第一个缓存文件放,ok=true往第二个缓存文件放
+/*void DbDemoFileOperate::QueryById(int id,bool ok)           //ok=false往第一个缓存文件放,ok=true往第二个缓存文件放
 {
     char buffer[fileLen];
     fstream cache;
@@ -60,7 +60,7 @@ void DbDemoFileOperate::QueryById(int id,bool ok)           //ok=false往第一�
         if(curr_id == id)
         {
             file.read(buffer,fileLen-sizeof(int));
-            cache.write((char *)(&cache_id),sizeof(int));
+            cache.write((char *)(&curr_id),sizeof(int));
             cache_id++;
             cache.write(buffer,fileLen-sizeof(int));
         }
@@ -92,19 +92,27 @@ void DbDemoFileOperate::QueryByName(char name[50], bool ok)
         if(strcmp(tmp_name,name)==0)
         {
             file.read(buffer,fileLen-sizeof(int)-50*sizeof(char));
-            cache.write((char*)(&cache_id),sizeof(int));
+            cache.write((char*)(&curr_id),sizeof(int));
             cache_id++;
             cache.write(name,sizeof(char)*50);
             cache.write(buffer,fileLen-sizeof(int)-50*sizeof(char));
         }
         else
-            file.read(buffer,fileLen-sizeof(char)*50);
+            file.read(buffer,fileLen-sizeof(char)*50-sizeof(int));
+        file.read((char *)(&curr_id),sizeof(int));
         pos+=fileLen;
     }
     cache.seekp(0,ios::beg);
     cache.write((char *)(&cache_id),sizeof(int));
     cache.close();
+}*/
+void Query(char *first,int column,bool ok)
+{
+    fstream cache;
+    if(ok)
+        cache.open("1.dat");
 }
+
 int GetCount(bool ok)
 {
 
