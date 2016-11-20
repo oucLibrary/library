@@ -1,5 +1,7 @@
 #include "dbdemo.h"
 
+#include <QMessageBox>
+
 
 //DbDemo方法
 DbDemo::DbDemo(){}
@@ -34,10 +36,16 @@ DbDemoFileOperate::DbDemoFileOperate(){
 DbDemoFileOperate::DbDemoFileOperate(char *fileName)
 {
     file.open(fileName, ios::app|ios::in|ios::out);
+    if(!file.is_open())
+    {
+        QMessageBox * messagebox = new QMessageBox();
+        messagebox->setText("打开文件失败");
+        messagebox->exec();
+    }
     file.seekg(0, ios::beg);
     file.read((char *)(&currId), sizeof(int));
     file.read((char *)(&colnum), sizeof(int));
-    for(int i=0; i<colnum; i++)
+    for(int i=0; i<=colnum; i++)
     {
         int pos;
         file.read((char *)(&pos), sizeof(int));
@@ -60,28 +68,29 @@ void DbDemoFileOperate::Query(char *aim, int column, bool ok)
     else cache.open("2.dat", ios::out|ios::binary);
     cache.write((char *)(&currId), sizeof(int));
     cache.write((char *)(&colnum), sizeof(int));
-    for(int i=0; i<colnum; i++)
+    for(int i=0; i<=colnum; i++)
     {
         int pos = col[i];
         cache.write((char *)(&pos), sizeof(int));
     }
 
-    file.seekg(col[column-1]+sizeof(int)*(colnum+2), ios::beg);
-    char infor[col[colnum-1]];
+    file.seekg(col[column-1]+sizeof(int)*(colnum+3), ios::beg);
+    char infor[col[colnum]];
     while(file.read(infor, col[column]-col[column-1]))
     {
         for(int i=0; i<col[column]-col[column-1]; i++)
         {
             if(infor[i] != aim[i])
             {
-                file.seekg(col[colnum-1]-col[column], ios::cur);
+                file.seekg(col[colnum]-col[column]+col[column-1], ios::cur);
                 break;
             }
             else if(i == col[column]-col[column-1]-1)
             {
-                file.seekg(-col[column-1], ios::cur);
-                file.read(infor, col[colnum-1]-1);
-                cache.write(infor, col[colnum-1]-1);
+                file.seekg(-col[column], ios::cur);
+                file.read(infor, col[colnum]);
+                cache.write(infor, col[colnum]);
+                file.seekg(col[column-1],ios::cur);
             }
         }
     }
