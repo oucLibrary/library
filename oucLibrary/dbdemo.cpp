@@ -35,7 +35,7 @@ DbDemoFileOperate::DbDemoFileOperate(){
 }
 DbDemoFileOperate::DbDemoFileOperate(char *fileName)
 {
-    file.open(fileName, ios::app|ios::in|ios::out);
+    file.open(fileName, ios::ate|ios::in|ios::out);
     if(!file.is_open())
     {
         QMessageBox * messagebox = new QMessageBox();
@@ -51,14 +51,31 @@ DbDemoFileOperate::DbDemoFileOperate(char *fileName)
         file.read((char *)(&pos), sizeof(int));
         col.push_back(pos);
     }
+    aim = new char[col[colnum]*100];
 }
-void DbDemoFileOperate::FileWrite(DbDemo *demo,int pos)      //写入第pos条文件,默认写入文件末尾
+void DbDemoFileOperate::FileWrite(DbDemo *demo,int pos,bool ok)      //写入第pos条文件,默认写入文件末尾
 {
     //if(pos == -1)
       //  file.seekp(0, ios::end);
     //else
       //  file.seekp(pos*fileLen+2*sizeof(int), ios::beg);
     //file.write((char *)(demo),fileLen);
+    char *aim=(char *)demo;
+    if(pos==-1){
+        file.seekp(0,ios::end);
+        file.write(aim,col[colnum]);
+        file.seekp(-col[colnum],ios::end);
+        if(!ok){
+            file.write((char *)(&currId),sizeof(int));
+            currId++;
+            file.seekp(0,ios::beg);
+            file.write((char *)(&currId),sizeof(int));
+        }
+    }
+    else{
+        file.seekp(sizeof(int)*(colnum+3)+pos*col[colnum],ios::beg);
+        file.write(aim,col[colnum]);
+    }
 }
 void DbDemoFileOperate::Query(char *aim, int column, bool ok)
 {
@@ -97,12 +114,78 @@ void DbDemoFileOperate::Query(char *aim, int column, bool ok)
 }
 char* DbDemoFileOperate::PrintFile(int pageNum, int printNum)
 {
-    file.seekp(sizeof(int)*(col+3)+col[colnum]*printNum*(pageNum-1),ios::beg);
-    char aim[col[colnum]*printNum];
+    file.seekp(sizeof(int)*(colnum+3)+col[colnum]*printNum*(pageNum-1),ios::beg);
     file.read(aim,col[colnum]*printNum);
     return aim;
 }
 int DbDemoFileOperate::GetCount()
 {
-    file.seekp(sizeof(int)*col+3);
+    file.seekp(0,ios::end);
+    int num=file.tellp();
+    return (num-(sizeof(int))*(colnum+3))/col[colnum];
+}
+
+int DbDemoFileOperate::GetPageCount(int per_page_num)
+{
+    return GetCount()/per_page_num+(GetCount()%per_page_num!=0);
+}
+
+void make_order(int st,int ed,fstream &file,int column,vector<int>&col){
+    if(st!=ed){
+        int siz=col.size();
+        siz--;
+        char cache1[col[siz]],cache2[col[siz]];
+        int  mid=(st+ed)>>1;
+        make_order(st,mid,file,column,col);
+        make_order(mid+1,ed,file,column,col);
+        int sta=st,eda=mid,stb=mid+1,edb=ed;
+        fstream order_tmp("3.dat",ios::in|ios::out);
+        while(sta!=eda&&stb!=edb){
+            file.seekg((siz+3)*sizeof(int)+col[siz]*sta,ios::beg);
+            file.read(cache1,col[siz]);
+            file.seekg((siz+3)*sizeof(int)+col[siz]*stb,ios::beg);
+            file.read(cache2,col[siz]);
+            bool ok=1;
+            for(int i=col[column];i<col[column+1];i++){
+                if(cache1[i]!=cache2[i]){
+                    if(cache1[i]>cache2[i]){
+                        ok=0;
+                        break;
+                    }
+                }
+            }
+            if(ok){
+                order_tmp.write(cache1,col[siz]);
+                sta++;
+            }
+            else{
+                order_tmp.write(cache2,col[siz]);
+                stb++;
+            }
+        }
+        while(sta<=eda){
+            file.seekg((siz+3)*sizeof(int)+col[siz]*sta,ios::beg);
+            file.read(cache1,col[siz]);
+            order_tmp.write(cache1,col[siz]);
+            sta++;
+        }
+        while(stb<=edb){
+            file.seekg((siz+3)*sizeof(int)+col[siz]*stb,ios::beg);
+            file.read(cache2,col[siz]);
+            order_tmp.write(cache2,col[siz]);
+            stb++;
+        }
+        file.seekp((siz+3)*sizeof(int)+col[siz]*st,ios::beg);
+        order_tmp.seekg(0,ios::beg);
+        for(int i=st;i<=ed;i++){
+            order_tmp.read(cache1,col[siz]);
+            file.write(cache1,col[siz]);
+        }
+    }
+}
+
+void DbDemoFileOperate::Order(int column)
+{
+    int len=GetCount();
+    make_order(0,len-1,file,column,col);
 }
