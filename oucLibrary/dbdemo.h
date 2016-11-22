@@ -35,15 +35,16 @@ public:
     DbDemoFileOperate(char *fileName); //实例化一类，打开一个文件名为fileName 的文件
     void FileWrite(DbDemo *demo, int pos = -1);    //文件写入
     void Query(char *aim,int column,bool ok);  //通过id查询,bool变量表示是否二次搜索
-    DbDemo* PrintFile(int,int,bool);//显示数据 bool表示是否是缓存文件中的,int表示取出的条数
-    int GetPageCount(int,bool);//输出页码总数，int变量为每页显示的数据条数,bool代表操作是否为缓存文件；
-    int GetCount(bool);//输出数据总条数，bool表示操作是否为缓存文件；
+    char* PrintFile(int pageNum, int printNum);//显示数据 bool表示是否是缓存文件中的,int表示取出的条数
+    int GetPageCount(int printNum);//输出页码总数，int变量为每页显示的数据条数,bool代表操作是否为缓存文件；
+    int GetCount();//输出数据总条数，bool表示操作是否为缓存文件；
     void Order(int column, bool ok); //对缓存文件排序，若无缓存文件则复制原文件作为缓存文件；
 private:
     fstream file;
 
     int currId;             //当前id
     int colnum;             //列数
+    int count;              //记录条数
     vector<int>col;         //每一列的起始位置
 };
 

@@ -95,3 +95,14 @@ void DbDemoFileOperate::Query(char *aim, int column, bool ok)
         }
     }
 }
+char* DbDemoFileOperate::PrintFile(int pageNum, int printNum)
+{
+    file.seekp(sizeof(int)*(col+3)+col[colnum]*printNum*(pageNum-1),ios::beg);
+    char aim[col[colnum]*printNum];
+    file.read(aim,col[colnum]*printNum);
+    return aim;
+}
+int DbDemoFileOperate::GetCount()
+{
+    file.seekp(sizeof(int)*col+3);
+}
