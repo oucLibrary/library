@@ -14,9 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         widget.cpp \
-    dbdemo.cpp
+    dbdemo.cpp \
+    login.cpp \
+    register.cpp
 
 HEADERS  += widget.h \
-    dbdemo.h
+    dbdemo.h \
+    login.h \
+    register.h
 
 FORMS    +=
