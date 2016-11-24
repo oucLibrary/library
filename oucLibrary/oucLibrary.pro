@@ -16,11 +16,16 @@ SOURCES += main.cpp\
         widget.cpp \
     dbdemo.cpp \
     login.cpp \
-    register.cpp
+    register.cpp \
+    tablewidget.cpp \
+    PageWidget.cpp
 
 HEADERS  += widget.h \
     dbdemo.h \
     login.h \
-    register.h
+    register.h \
+    tablewidget.h \
+    pagewidget.h
 
-FORMS    +=
+FORMS    += \
+    PageWidget.ui

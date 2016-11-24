@@ -35,7 +35,7 @@ Login::Login(QWidget * parent) : QWidget(parent), showname(new QLabel(this)), sh
 
 void Login::check()
 {
-    bool ok = false;
+    bool ok = true;
     QMessageBox * mess = new QMessageBox(this);
     //判断登录是否成功以及是什么身份登录的
     Identify id = User;
@@ -49,6 +49,7 @@ void Login::check()
         mess->setText("登录成功");
         mess->exec();
         emit login_success(username->text(), password->text(), id);
+        close();
     }
 }
 
