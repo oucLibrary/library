@@ -20,10 +20,6 @@ Widget::Widget(QWidget *parent) :
     ope_aim = Book;
 
     choose->setGeometry(60, 120, 100, 30);
-    choose->addItem("全部");
-    choose->addItem("作者");
-    choose->addItem("书籍");
-    choose->addItem("分类");
 
     context->setGeometry(200, 120, 300, 30);
 
@@ -46,6 +42,9 @@ Widget::Widget(QWidget *parent) :
 
     connect(logins, SIGNAL(login_success(QString,QString,Identify)), this, SLOT(login_success(QString,QString,Identify)));
     connect(lot, SIGNAL(clicked(bool)), this, SLOT(logout()));
+    connect(userWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
+    connect(rootWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
+    chooseChange();
 }
 
 void Widget::createShowResult()
@@ -83,6 +82,7 @@ void Widget::createUserWidget()
     userWidget->setGeometry(60, 170, 580, 300);
     userWidget->addTab(showBookResult, QIcon(), "图书查询");
     userWidget->addTab(showBorrowResult, QIcon(), "借阅记录");
+    userWidget->show();
 }
 
 void Widget::createRootWidget()
@@ -91,6 +91,7 @@ void Widget::createRootWidget()
     rootWidget->addTab(showBookResult, QIcon(), "图书查询");
     rootWidget->addTab(showBorrowResult, QIcon(), "借阅记录");
     rootWidget->addTab(showUserResult,QIcon(), "用户管理");
+    rootWidget->show();
 }
 
 void Widget::query()
@@ -130,21 +131,49 @@ void Widget::logout()
     log->show();
     if(id == User)
     {
-        userWidget->removeTab(0);
         userWidget->removeTab(1);
+        userWidget->removeTab(0);
+        userWidget->hide();
     }
     if(id == Root)
     {
-        rootWidget->removeTab(0);
-        rootWidget->removeTab(1);
         rootWidget->removeTab(2);
+        rootWidget->removeTab(1);
+        rootWidget->removeTab(0);
+        rootWidget->hide();
     }
+    showBookResult->setParent(this);
+    showBookResult->setGeometry(60, 170, 580, 300);
+    showBookResult->show();
     id = Empty;
+    chooseChange();
 }
 
 void Widget::showResult(int page)
 {
     char * aim = result[ope_aim]->PrintFile(page, 15);
+}
+
+void Widget::chooseChange(int index)
+{
+    choose->clear();
+    if(index == 0)
+    {
+        choose->addItem("作者");
+        choose->addItem("书名");
+        choose->addItem("分类");
+    }
+    else if(index == 1 && id == Root)
+    {
+        choose->addItem("姓名");
+        choose->addItem("书名");
+        choose->addItem("帐号");
+    }
+    else if(index == 2)
+    {
+        choose->addItem("姓名");
+        choose->addItem("帐号");
+    }
 }
 
 void Widget::paintEvent(QPaintEvent *event)

@@ -230,6 +230,20 @@ void Classification::Setkindid(int tmp){
     kindid=tmp;
 }
 
+Persons::Persons(int id, string name, char account[], char password[], bool sex,
+    char email[], char phone[], int age, QDate birth): DbDemo(id, name), sex(sex),age(age),birth(birth)
+{
+    for(int i=0;i<20;i++)
+    {
+        this->account[i] = account[i];
+        this->password[i] = password[i];
+    }
+    for(int i=0;i<50;i++)
+        this->email[i] = email[i];
+    for(int i=0;i<15;i++)
+        this->phone[i] = phone[i];
+}
+
 char *Persons::Getaccount(){
     return account;
 }
@@ -274,11 +288,11 @@ void Persons::Setage(int tmp){
     age=tmp;
 }
 
-Time Persons::Getbirth(){
+QDate Persons::Getbirth(){
     return birth;
 }
 
-void Persons::Setbirth(Time tmp){
+void Persons::Setbirth(QDate tmp){
     birth=tmp;
 }
 
@@ -298,11 +312,11 @@ void Borrows::SetbookId(int tmp){
     bookId=tmp;
 }
 
-Time Borrows::GetfirstTime(){
+QDate Borrows::GetfirstTime(){
     return firstTime;
 }
 
-void Borrows::SetfirstTime(Time tmp){
+void Borrows::SetfirstTime(QDate tmp){
     firstTime=tmp;
 }
 
@@ -314,11 +328,11 @@ void Borrows::SetifLend(bool tmp){
     ifLend=tmp;
 }
 
-Time Borrows::GetlastTime(){
+QDate Borrows::GetlastTime(){
     return lastTime;
 }
 
-void Borrows::SetlastTime(Time tmp){
+void Borrows::SetlastTime(QDate tmp){
     lastTime=tmp;
 }
 
@@ -329,6 +343,16 @@ bool Borrows::GetifReturn(){
 void Borrows::SetifReturn(bool tmp){
     ifReturn=tmp;
 }
+
+Admins::Admins(int id, string name, char account[20], char password[20]): DbDemo(id, name)
+{
+    for(int i=0; i<20; i++)
+    {
+        this->account[i] = account[i];
+        this->password[i] = password[i];
+    }
+}
+
 char *Admins::Getaccount(){
     return account;
 }
