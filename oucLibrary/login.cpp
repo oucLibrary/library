@@ -38,7 +38,7 @@ void Login::check()
     bool ok = true;
     QMessageBox * mess = new QMessageBox(this);
     //判断登录是否成功以及是什么身份登录的
-    Identify id = User;
+    Identify id = Root;
     if(!ok)
     {
         mess->setText("帐号或密码错误");
