@@ -5,12 +5,11 @@
 
 //DbDemo方法
 DbDemo::DbDemo(){}
-DbDemo::DbDemo(int id1,string a1){
-    id=id1;
-    for(int i=0; i<(int)a1.length(); i++){
-        name[i]=a1[i];
-    }
-    name[a1.length()]=0;
+DbDemo::DbDemo(char *tmp){
+    id=*((int*)tmp);
+}
+DbDemo::DbDemo(int tmp){
+    id=tmp;
 }
 
 int DbDemo::GetId(){
@@ -19,16 +18,6 @@ int DbDemo::GetId(){
 
 void DbDemo::SetId(int id1){
     id=id1;
-}
-string DbDemo::GetName(){
-    string str=name;
-    return str;
-}
-void DbDemo::SetName(string a1){
-    for(int i=0;i<(int)a1.length();i++){
-        name[i]=a1[i];
-    }
-    name[a1.length()]=0;
 }
 //DbDemoFileOperate方法
 DbDemoFileOperate::DbDemoFileOperate(){
@@ -189,29 +178,143 @@ void DbDemoFileOperate::Order(int column)
     int len=GetCount();
     make_order(0,len-1,file,column,col);
 }
-
-bool Books::Getlend(){
-    return lend;
+Books::Books(int tid,QString tname,int tamount,QString tauthor,QString tpress,QString tisbn):DbDemo(tid){
+    Setname(tname);
+    Setamount(tamount);
+    Setauthor(tauthor);
+    Setpress(tpress);
+    Setisbn(tisbn);
+}
+Books::Books(char *tmp):DbDemo(tmp){
+    tmp+=sizeof(int);
+    amount=*((int *)tmp);
+    tmp+=sizeof(int);
+    for(int i=0;i<20;i++){
+        author[i]=*tmp;
+        tmp++;
+    }
+    for(int i=0;i<20;i++){
+        press[i]=*tmp;
+        tmp++;
+    }
+    for(int i=0;i<20;i++){
+        isbn[i]=*tmp;
+        tmp++;
+    }
 }
 
-void Books::Setlend(bool tmp){
-    lend=tmp;
+char *Books::Getname(){
+    return name;
+}
+void Books::Setname(QString tmp){
+    memset(name,0,sizeof(name));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<49;i++){
+        name[i]=tmp.toStdString()[i];
+    }
+}
+
+int Books::Getamount(){
+    return amount;
+}
+
+void Books::Setamount(int tmp){
+    amount=tmp;
+}
+
+char *Books::Getisbn(){
+    return isbn;
+}
+
+void Books::Setisbn(QString tmp){
+    memset(isbn,0,sizeof(isbn));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<19;i++){
+        isbn[i]=tmp.toStdString()[i];
+    }
 }
 
 char *Books::Getauthor(){
     return author;
 }
 
-void Books::Setauthor(char *tmp){
-    strcpy(author,tmp);
+void Books::Setauthor(QString tmp){
+    memset(author,0,sizeof(author));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<19;i++){
+        author[i]=tmp.toStdString()[i];
+    }
 }
 
 char *Books::Getpress(){
     return press;
 }
 
-void Books::Setpress(char *tmp){
-    strcpy(press,tmp);
+void Books::Setpress(QString tmp){
+    memset(press,0,sizeof(press));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<19;i++){
+        press[i]=tmp.toStdString()[i];
+    }
+}
+
+Bookcopy::Bookcopy(int tid,int tbookid,int tlend):DbDemo(tid){
+    bookid=tbookid;
+    lend=tlend;
+}
+
+Bookcopy::Bookcopy(char *tmp):DbDemo(tmp){
+    tmp+=sizeof(int);
+    bookid=*((int *)tmp);
+    tmp+=sizeof(int);
+    lend=*((int *)tmp);
+}
+
+void Bookcopy::Setbookid(int tmp){
+    bookid=tmp;
+}
+
+void Bookcopy::Setlend(int tmp){
+    lend=tmp;
+}
+
+int Bookcopy::Getbookid(){
+    return bookid;
+}
+
+int Bookcopy::Getlend(){
+    return lend;
+}
+
+
+BookKinds::BookKinds(char *tmp):DbDemo(tmp){
+    tmp+=sizeof(int);
+    for(int i=0;i<50;i++){
+        kindName[i]=*tmp;
+        tmp++;
+    }
+}
+
+BookKinds::BookKinds(int tid,QString tkindName):DbDemo(tid){
+    SetkindName(tkindName);
+}
+
+void BookKinds::SetkindName(QString tmp){
+    memset(kindName,0,sizeof(kindName));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<49;i++){
+        kindName[i]=tmp.toStdString()[i];
+    }
+}
+
+char *BookKinds::GetkindName(){
+    return kindName;
+}
+Classification::Classification(int tid,int tbookid,int tkindid):DbDemo(tid){
+    bookid=tbookid;
+    kindid=tkindid;
+}
+
+Classification::Classification(char *tmp):DbDemo(tmp){
+    tmp+=sizeof(int);
+    bookid=*((int *)tmp);
+    tmp+=sizeof(int);
+    kindid=*((int *)tmp);
 }
 
 int Classification::Getbookid(){
@@ -230,54 +333,91 @@ void Classification::Setkindid(int tmp){
     kindid=tmp;
 }
 
-Persons::Persons(int id, string name, char account[], char password[], bool sex,
-    char email[], char phone[], int age, QDate birth): DbDemo(id, name), sex(sex),age(age),birth(birth)
-{
-    for(int i=0;i<20;i++)
-    {
-        this->account[i] = account[i];
-        this->password[i] = password[i];
+Persons::Persons(int tid,QString taccount,QString tpassword,QString tname,int tsex,QString temail,QString tphone,int tage,QDate tbirth):DbDemo(tid){
+    Setaccount(taccount);
+    Setpassword(tpassword);
+    Setname(tname);
+    Setsex(tsex);
+    Setemail(temail);
+    Setphone(tphone);
+    Setage(tage);
+    Setbirth(tbirth);
+}
+Persons::Persons(char *tmp):DbDemo(tmp){
+    tmp+=sizeof(int);
+    for(int i=0;i<20;i++){
+        account[i]=*tmp;
+        tmp++;
     }
-    for(int i=0;i<50;i++)
-        this->email[i] = email[i];
-    for(int i=0;i<15;i++)
-        this->phone[i] = phone[i];
+    for(int i=0;i<20;i++){
+        password[i]=*tmp;
+        tmp++;
+    }
+    for(int i=0;i<20;i++){
+        name[i]=*tmp;
+        tmp++;
+    }
+    sex=*((int *)tmp);
+    tmp+=sizeof(int);
+    for(int i=0;i<50;i++){
+        email[i]=*tmp;
+        tmp++;
+    }
+    for(int i=0;i<15;i++){
+        phone[i]=*tmp;
+        tmp++;
+    }
+    age=*((int *)tmp);
+    tmp+=sizeof(int);
+    birth=*((QDate*)tmp);
 }
 
 char *Persons::Getaccount(){
     return account;
 }
 
-void Persons::Setaccount(char *tmp){
-    strcpy(account,tmp);
+void Persons::Setaccount(QString tmp){
+    memset(account,0,sizeof(account));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<19;i++){
+        account[i]=tmp.toStdString()[i];
+    }
 }
 char *Persons::Getpassword(){
     return password;
 }
-void Persons::Setpassword(char *tmp){
-    strcpy(password,tmp);
+void Persons::Setpassword(QString tmp){
+    memset(password,0,sizeof(password));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<19;i++){
+        password[i]=tmp.toStdString()[i];
+    }
 }
-bool Persons::Getsex(){
+int Persons::Getsex(){
     return sex;
 }
 
-void Persons::Setsex(bool tmp){
+void Persons::Setsex(int tmp){
     sex=tmp;
 }
 char *Persons::Getemail(){
     return email;
 }
 
-void Persons::Setemail(char *tmp){
-    strcpy(email,tmp);
+void Persons::Setemail(QString tmp){
+    memset(email,0,sizeof(email));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<49;i++){
+        email[i]=tmp.toStdString()[i];
+    }
 }
 
 char *Persons::Getphone(){
     return phone;
 }
 
-void Persons::Setphone(char *tmp){
-    strcpy(phone,tmp);
+void Persons::Setphone(QString tmp){
+    memset(phone,0,sizeof(phone));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<14;i++){
+        phone[i]=tmp.toStdString()[i];
+    }
 }
 
 int Persons::Getage(){
@@ -294,6 +434,42 @@ QDate Persons::Getbirth(){
 
 void Persons::Setbirth(QDate tmp){
     birth=tmp;
+}
+
+char *Persons::Getname(){
+    return name;
+}
+
+void Persons::Setname(QString tmp){
+    memset(name,0,sizeof(name));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<19;i++){
+        name[i]=tmp.toStdString()[i];
+    }
+}
+
+Borrows::Borrows(char *tmp):DbDemo(tmp){
+    tmp+=sizeof(int);
+    studentId=*((int *)tmp);
+    tmp+=sizeof(int);
+    bookId=*((int *)tmp);
+    tmp+=sizeof(int);
+    firstTime=*((QDate *)tmp);
+    tmp+=sizeof(QDate);
+    ifLend=*((int *)tmp);
+    tmp+=sizeof(int);
+    lastTime=*((QDate *)tmp);
+    tmp+=sizeof(QDate);
+    ifReturn=*((int *)tmp);
+    tmp+=sizeof(int);
+}
+
+Borrows::Borrows(int tid,int tstudentId,int tbookId,QDate tfirstTime,int tifLend,QDate tlastTime,int tifReturn):DbDemo(tid){
+    SetstudentId(tstudentId);
+    SetbookId(tbookId);
+    SetfirstTime(tfirstTime);
+    SetifLend(tifLend);
+    SetlastTime(tlastTime);
+    SetifReturn(tifReturn);
 }
 
 int Borrows::GetstudentId(){
@@ -320,11 +496,11 @@ void Borrows::SetfirstTime(QDate tmp){
     firstTime=tmp;
 }
 
-bool Borrows::GetifLend(){
+int Borrows::GetifLend(){
     return ifLend;
 }
 
-void Borrows::SetifLend(bool tmp){
+void Borrows::SetifLend(int tmp){
     ifLend=tmp;
 }
 
@@ -336,20 +512,28 @@ void Borrows::SetlastTime(QDate tmp){
     lastTime=tmp;
 }
 
-bool Borrows::GetifReturn(){
+int Borrows::GetifReturn(){
     return ifReturn;
 }
 
-void Borrows::SetifReturn(bool tmp){
+void Borrows::SetifReturn(int tmp){
     ifReturn=tmp;
 }
 
-Admins::Admins(int id, string name, char account[20], char password[20]): DbDemo(id, name)
-{
-    for(int i=0; i<20; i++)
-    {
-        this->account[i] = account[i];
-        this->password[i] = password[i];
+Admins::Admins(int tid, QString taccount,QString tpassword):DbDemo(tid){
+    Setaccount(taccount);
+    Setpassword(tpassword);
+}
+
+Admins::Admins(char *tmp):DbDemo(tmp){
+    tmp+=sizeof(int);
+    for(int i=0;i<20;i++){
+        account[i]=*tmp;
+        tmp++;
+    }
+    for(int i=0;i<20;i++){
+        password[i]=*tmp;
+        tmp++;
     }
 }
 
@@ -357,14 +541,20 @@ char *Admins::Getaccount(){
     return account;
 }
 
-void Admins::Setaccount(char *tmp){
-    strcpy(account,tmp);
+void Admins::Setaccount(QString tmp){
+    memset(account,0,sizeof(account));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<19;i++){
+        account[i]=tmp.toStdString()[i];
+    }
 }
 
 char *Admins::Getpassword(){
     return password;
 }
 
-void Admins::Setpassword(char *tmp){
-    strcpy(password,tmp);
+void Admins::Setpassword(QString tmp){
+    memset(password,0,sizeof(password));
+    for(int i=0;i<(int)tmp.toStdString().length()&&i<19;i++){
+        password[i]=tmp.toStdString()[i];
+    }
 }

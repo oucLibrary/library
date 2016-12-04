@@ -8,15 +8,12 @@ using namespace std;
 class DbDemo{
 protected:
     int id;
-    char name[50];
-    //class Time;
 public:
     DbDemo();  //构造函数
-    DbDemo(int ,string); //带参数的构造函数
+    DbDemo(int tmp);
+    DbDemo(char *tmp); //从文件操作类的缓存直接读取的构造函数
     int GetId();   //获取id
     void SetId(int);  //设置id
-    string GetName();  //获取name的值
-    void SetName(string);  //设置name的值
 };
 
 class DbDemoFileOperate{//column and raw are all started from 0
@@ -41,23 +38,54 @@ private:
 
 class Books:public DbDemo{
 private:
+    Books(char *tmp);
+    Books(int tid,QString tbookName,int tamount,QString tauthor,QString tpress,QString tisbn);
+    char name[50];
+    int amount;
     char author[20];
     char press[20];
+    char isbn[20];
 public:
-    bool Getlend();
-    void Setlend(bool tmp);
+    int Getamount();
+    void Setamount(int tmp);
     char *Getauthor();
-    void Setauthor(char *tmp);
+    void Setname(QString tmp);
+    char *Getname();
+    void Setauthor(QString tmp);
     char *Getpress();
-    void Setpress(char *tmp);
+    void Setpress(QString tmp);
+    char *Getisbn();
+    void Setisbn(QString tmp);
+};
+
+class Bookcopy:public DbDemo{
+public:
+    Bookcopy(){}
+    Bookcopy(int tid,int tbookid,int tlend);
+    Bookcopy(char *tmp);
+    void Setbookid(int tmp);
+    void Setlend(int tmp);
+    int Getbookid();
+    int Getlend();
+private:
+    int bookid;
+    int lend;
 };
 
 class BookKinds:public DbDemo{
-
+public:
+    BookKinds(char *tmp);
+    BookKinds(int tid,QString tkindName);
+    void SetkindName(QString tmp);
+    char *GetkindName();
+private:
+    char kindName[50];
 };
 
 class Classification:public DbDemo{
 private:
+    Classification(int tid,int tbookid,int tkindid);
+    Classification(char *tmp);
     int bookid;
     int kindid;
 public:
@@ -71,23 +99,27 @@ class Persons:public DbDemo{
 private:
     char account[20];
     char password[20];
-    bool sex;
+    char name[20];
+    int sex;
     char email[50];
     char phone[15];//
     int age;
     QDate birth;
 public:
-    Persons(int id,string name,char account[20],char password[20],bool sex,char email[50],char phone[15],int age,QDate birth);
+    void Setname(QString tmp);
+    char *Getname();
+    Persons(char *tmp);
+    Persons(int tid,QString taccount,QString tpassword,QString tname,int tsex,QString temail,QString tphone,int tage,QDate birth);
     char *Getaccount();
-    void Setaccount(char *tmp);
+    void Setaccount(QString tmp);
     char *Getpassword();
-    void Setpassword(char *tmp);
-    bool Getsex();
-    void Setsex(bool tmp);
+    void Setpassword(QString tmp);
+    int Getsex();
+    void Setsex(int tmp);
     char *Getemail();
-    void Setemail(char *tmp);
+    void Setemail(QString tmp);
     char *Getphone();
-    void Setphone(char *tmp);
+    void Setphone(QString tmp);
     int Getage();
     void Setage(int tmp);
     QDate Getbirth();
@@ -99,22 +131,24 @@ private:
     int studentId;
     int bookId;
     QDate firstTime;
-    bool ifLend;
+    int ifLend;
     QDate lastTime;
-    bool ifReturn;
+    int ifReturn;
 public:
+    Borrows(char *);
+    Borrows(int tid,int tstudentId,int tbookId,QDate tfirstTime,int tifLend,QDate lastTime,int tifReturn);
     int GetstudentId();
     void SetstudentId(int tmp);
     int GetbookId();
     void SetbookId(int tmp);
     QDate GetfirstTime();
     void SetfirstTime(QDate tmp);
-    bool GetifLend();
-    void SetifLend(bool tmp);
+    int GetifLend();
+    void SetifLend(int tmp);
     QDate GetlastTime();
     void SetlastTime(QDate tmp);
-    bool GetifReturn();
-    void SetifReturn(bool tmp);
+    int GetifReturn();
+    void SetifReturn(int tmp);
 };
 
 class Admins:public DbDemo{
@@ -122,11 +156,12 @@ private:
     char account[20];
     char password[20];
 public:
-    Admins(int id, string name, char account[20], char password[20]);
+    Admins(int tid, QString taccount,QString tpassword);
+    Admins(char *tmp);
     char *Getaccount();
-    void Setaccount(char *tmp);
+    void Setaccount(QString tmp);
     char *Getpassword();
-    void Setpassword(char *tmp);
+    void Setpassword(QString tmp);
 };
 
 #endif // DBDEMO_H
