@@ -20,10 +20,6 @@ Widget::Widget(QWidget *parent) :
     ope_aim = Book;
 
     choose->setGeometry(60, 120, 100, 30);
-    choose->addItem("全部");
-    choose->addItem("作者");
-    choose->addItem("书籍");
-    choose->addItem("分类");
 
     context->setGeometry(200, 120, 300, 30);
 
@@ -46,6 +42,9 @@ Widget::Widget(QWidget *parent) :
 
     connect(logins, SIGNAL(login_success(QString,QString,Identify)), this, SLOT(login_success(QString,QString,Identify)));
     connect(lot, SIGNAL(clicked(bool)), this, SLOT(logout()));
+    connect(userWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
+    connect(rootWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
+    chooseChange();
 }
 
 void Widget::createShowResult()
@@ -147,11 +146,34 @@ void Widget::logout()
     showBookResult->setGeometry(60, 170, 580, 300);
     showBookResult->show();
     id = Empty;
+    chooseChange();
 }
 
 void Widget::showResult(int page)
 {
     char * aim = result[ope_aim]->PrintFile(page, 15);
+}
+
+void Widget::chooseChange(int index)
+{
+    choose->clear();
+    if(index == 0)
+    {
+        choose->addItem("作者");
+        choose->addItem("书名");
+        choose->addItem("分类");
+    }
+    else if(index == 1 && id == Root)
+    {
+        choose->addItem("姓名");
+        choose->addItem("书名");
+        choose->addItem("帐号");
+    }
+    else if(index == 2)
+    {
+        choose->addItem("姓名");
+        choose->addItem("帐号");
+    }
 }
 
 void Widget::paintEvent(QPaintEvent *event)

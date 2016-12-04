@@ -34,6 +34,7 @@ protected slots:
     void login_success(QString username, QString password, Identify id);
     void logout();
     void showResult(int page);
+    void chooseChange(int index = 0);
 
 private:
     QComboBox * choose;        //选择查询目标
