@@ -83,6 +83,7 @@ void Widget::createUserWidget()
     userWidget->setGeometry(60, 170, 580, 300);
     userWidget->addTab(showBookResult, QIcon(), "图书查询");
     userWidget->addTab(showBorrowResult, QIcon(), "借阅记录");
+    userWidget->show();
 }
 
 void Widget::createRootWidget()
@@ -91,6 +92,7 @@ void Widget::createRootWidget()
     rootWidget->addTab(showBookResult, QIcon(), "图书查询");
     rootWidget->addTab(showBorrowResult, QIcon(), "借阅记录");
     rootWidget->addTab(showUserResult,QIcon(), "用户管理");
+    rootWidget->show();
 }
 
 void Widget::query()
@@ -130,15 +132,20 @@ void Widget::logout()
     log->show();
     if(id == User)
     {
-        userWidget->removeTab(0);
         userWidget->removeTab(1);
+        userWidget->removeTab(0);
+        userWidget->hide();
     }
     if(id == Root)
     {
-        rootWidget->removeTab(0);
-        rootWidget->removeTab(1);
         rootWidget->removeTab(2);
+        rootWidget->removeTab(1);
+        rootWidget->removeTab(0);
+        rootWidget->hide();
     }
+    showBookResult->setParent(this);
+    showBookResult->setGeometry(60, 170, 580, 300);
+    showBookResult->show();
     id = Empty;
 }
 

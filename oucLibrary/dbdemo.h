@@ -2,16 +2,8 @@
 #define DBDEMO_H
 
 #include <bits/stdc++.h>
+#include <QDate>
 using namespace std;
-class Time{
-private:
-    int timestamp;
-    int YY;
-    int MM;
-    int DD;
-public:
-    Time();
-};
 
 class DbDemo{
 protected:
@@ -84,8 +76,9 @@ private:
     char email[50];
     char phone[15];//
     int age;
-    Time birth;
+    QDate birth;
 public:
+    Persons(int id,string name,char account[20],char password[20],bool sex,char email[50],char phone[15],int age,QDate birth);
     char *Getaccount();
     void Setaccount(char *tmp);
     char *Getpassword();
@@ -98,29 +91,29 @@ public:
     void Setphone(char *tmp);
     int Getage();
     void Setage(int tmp);
-    Time Getbirth();
-    void Setbirth(Time tmp);
+    QDate Getbirth();
+    void Setbirth(QDate tmp);
 };
 
 class Borrows:public DbDemo{
 private:
     int studentId;
     int bookId;
-    Time firstTime;
+    QDate firstTime;
     bool ifLend;
-    Time lastTime;
+    QDate lastTime;
     bool ifReturn;
 public:
     int GetstudentId();
     void SetstudentId(int tmp);
     int GetbookId();
     void SetbookId(int tmp);
-    Time GetfirstTime();
-    void SetfirstTime(Time tmp);
+    QDate GetfirstTime();
+    void SetfirstTime(QDate tmp);
     bool GetifLend();
     void SetifLend(bool tmp);
-    Time GetlastTime();
-    void SetlastTime(Time tmp);
+    QDate GetlastTime();
+    void SetlastTime(QDate tmp);
     bool GetifReturn();
     void SetifReturn(bool tmp);
 };
