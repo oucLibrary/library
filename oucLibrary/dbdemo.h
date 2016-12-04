@@ -14,7 +14,7 @@ public:
 };
 
 class DbDemo{
-private:
+protected:
     int id;
     char name[50];
     //class Time;
@@ -130,6 +130,7 @@ private:
     char account[20];
     char password[20];
 public:
+    Admins(int id, string name, char account[20], char password[20]);
     char *Getaccount();
     void Setaccount(char *tmp);
     char *Getpassword();

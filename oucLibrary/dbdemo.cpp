@@ -329,6 +329,16 @@ bool Borrows::GetifReturn(){
 void Borrows::SetifReturn(bool tmp){
     ifReturn=tmp;
 }
+
+Admins::Admins(int id, string name, char account[20], char password[20]): DbDemo(id, name)
+{
+    for(int i=0; i<20; i++)
+    {
+        this->account[i] = account[i];
+        this->password[i] = password[i];
+    }
+}
+
 char *Admins::Getaccount(){
     return account;
 }

@@ -1,4 +1,5 @@
 #include "login.h"
+#include "dbdemo.h"
 
 #include <QMessageBox>
 
@@ -35,19 +36,40 @@ Login::Login(QWidget * parent) : QWidget(parent), showname(new QLabel(this)), sh
 
 void Login::check()
 {
-    bool ok = true;
-    QMessageBox * mess = new QMessageBox(this);
+    bool ok = false;
     //判断登录是否成功以及是什么身份登录的
     Identify id = Root;
+    DbDemoFileOperate * file = new DbDemoFileOperate("./admin/admin.dat");
+    for(int i=0; i<file->GetCount(); i++)
+    {
+        char * ans = new char[1000];
+        ans = file->PrintFile(i, 1);
+        for(int j=0; j<username->text().length(); j++)
+        {
+            if(username->text()[j] != ans[i+sizeof(int)+50])
+                break;
+            if(i == username->text().length()-1)
+                ok = true;
+        }
+        if(ok)
+        {
+            for(int j=0; j<password->text().length(); j++)
+            {
+                if(password->text()[j] != ans[i+sizeof(int)+70])
+                    ok = false;
+            }
+        }
+        if(ok)
+            break;
+    }
     if(!ok)
     {
+        QMessageBox * mess = new QMessageBox(this);
         mess->setText("帐号或密码错误");
         mess->exec();
     }
     else
     {
-        mess->setText("登录成功");
-        mess->exec();
         emit login_success(username->text(), password->text(), id);
         close();
     }
