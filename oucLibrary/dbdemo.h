@@ -41,7 +41,6 @@ private:
 
 class Books:public DbDemo{
 private:
-    bool lend;
     char author[20];
     char press[20];
 public:
