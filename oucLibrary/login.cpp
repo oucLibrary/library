@@ -41,12 +41,8 @@ void Login::check()
     bool ok = false;
     //判断登录是否成功以及是什么身份登录的
     Identify id = Root;
-    DbDemoFileOperate * file = new DbDemoFileOperate("./admin/admin.dat");
-    /*QString account,passwd;
-    account="14020031000";
-    passwd="123456";
-    Admins * admin = new Admins(0,account,passwd);
-    file->FileWrite((DbDemo *)admin);*/
+    int num;
+    DbDemoFileOperate * file = new DbDemoFileOperate("./admins/admins.dat");
 
     for(int i=1; i<=file->GetCount(); i++)
     {
@@ -54,6 +50,7 @@ void Login::check()
         if(!strcmp(admin->Getaccount(), username->text().toStdString().c_str()))
             if(!strcmp(admin->Getpassword(), password->text().toStdString().c_str()))
             {
+                num = admin->GetId();
                 ok = true;
                 break;
             }
@@ -62,13 +59,14 @@ void Login::check()
     if(!ok)
     {
         id = User;
-        DbDemoFileOperate * file = new DbDemoFileOperate("./person/person.dat");
+        DbDemoFileOperate * file = new DbDemoFileOperate("./persons/persons.dat");
         for(int i=1; i<=file->GetCount(); i++)
         {
             Persons * person = (Persons *)file->PrintFile(i,1);
             if(!strcmp(person->Getaccount(), username->text().toStdString().c_str()))
                 if(!strcmp(person->Getpassword(), password->text().toStdString().c_str()))
                 {
+                    num = person->GetId();
                     ok = true;
                     break;
                 }
@@ -82,14 +80,14 @@ void Login::check()
     }
     else
     {
-        emit login_success(username->text(), password->text(), id);
+        emit login_success(username->text(), password->text(), num, id);
         close();
     }
 }
 
 void Login::register_success(QString username, QString password)
 {
-    emit login_success(username, password);
+    //emit login_success(username, password);
 }
 
 Login::~Login()

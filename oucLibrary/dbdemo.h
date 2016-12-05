@@ -21,7 +21,7 @@ public:
     DbDemoFileOperate();  //无特定意义
     DbDemoFileOperate(char *fileName); //实例化一类，打开一个文件名为fileName 的文件
     void FileWrite(DbDemo *demo, int pos = -1,bool ok=false);    //文件写入 moren no cache file and after the file
-    void Query(char *aim,int column,bool ok);  //通过id查询,bool变量表示是否二次搜索
+    void Query(char *aim,int column,bool ok);  //通过id查询,bool变量表示是否二次搜索,从第一列开始
     char* PrintFile (int pageNum, int printNum);//显示数据 bool表示是否是缓存文件中的,int表示取出的条数
     int GetPageCount(int printNum);//输出页码总数，int变量为每页显示的数据条数,bool代表操作是否为缓存文件；
     int GetCount();//输出数据总条数，bool表示操作是否为缓存文件；

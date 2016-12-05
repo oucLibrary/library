@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Login_t {
-    QByteArrayData data[9];
-    char stringdata0[74];
+    QByteArrayData data[10];
+    char stringdata0[78];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,14 +34,15 @@ QT_MOC_LITERAL(1, 6, 13), // "login_success"
 QT_MOC_LITERAL(2, 20, 0), // ""
 QT_MOC_LITERAL(3, 21, 8), // "username"
 QT_MOC_LITERAL(4, 30, 8), // "password"
-QT_MOC_LITERAL(5, 39, 8), // "Identify"
-QT_MOC_LITERAL(6, 48, 2), // "id"
-QT_MOC_LITERAL(7, 51, 5), // "check"
-QT_MOC_LITERAL(8, 57, 16) // "register_success"
+QT_MOC_LITERAL(5, 39, 3), // "num"
+QT_MOC_LITERAL(6, 43, 8), // "Identify"
+QT_MOC_LITERAL(7, 52, 2), // "id"
+QT_MOC_LITERAL(8, 55, 5), // "check"
+QT_MOC_LITERAL(9, 61, 16) // "register_success"
 
     },
     "Login\0login_success\0\0username\0password\0"
-    "Identify\0id\0check\0register_success"
+    "num\0Identify\0id\0check\0register_success"
 };
 #undef QT_MOC_LITERAL
 
@@ -59,16 +60,16 @@ static const uint qt_meta_data_Login[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,   34,    2, 0x06 /* Public */,
-       1,    2,   41,    2, 0x26 /* Public | MethodCloned */,
+       1,    4,   34,    2, 0x06 /* Public */,
+       1,    3,   43,    2, 0x26 /* Public | MethodCloned */,
 
  // slots: name, argc, parameters, tag, flags
-       7,    0,   46,    2, 0x09 /* Protected */,
-       8,    2,   47,    2, 0x09 /* Protected */,
+       8,    0,   50,    2, 0x09 /* Protected */,
+       9,    2,   51,    2, 0x09 /* Protected */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::QString, QMetaType::QString, 0x80000000 | 5,    3,    4,    6,
-    QMetaType::Void, QMetaType::QString, QMetaType::QString,    3,    4,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int, 0x80000000 | 6,    3,    4,    5,    7,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,    3,    4,    5,
 
  // slots: parameters
     QMetaType::Void,
@@ -83,8 +84,8 @@ void Login::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         Login *_t = static_cast<Login *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->login_success((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< Identify(*)>(_a[3]))); break;
-        case 1: _t->login_success((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 0: _t->login_success((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< Identify(*)>(_a[4]))); break;
+        case 1: _t->login_success((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         case 2: _t->check(); break;
         case 3: _t->register_success((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
         default: ;
@@ -93,7 +94,7 @@ void Login::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         int *result = reinterpret_cast<int *>(_a[0]);
         void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (Login::*_t)(QString , QString , Identify );
+            typedef void (Login::*_t)(QString , QString , int , Identify );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Login::login_success)) {
                 *result = 0;
             }
@@ -138,9 +139,9 @@ int Login::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Login::login_success(QString _t1, QString _t2, Identify _t3)
+void Login::login_success(QString _t1, QString _t2, int _t3, Identify _t4)
 {
-    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)), const_cast<void*>(reinterpret_cast<const void*>(&_t4)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_END_MOC_NAMESPACE
