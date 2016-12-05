@@ -6,7 +6,7 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../cp/widget.h"
+#include "widget.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Widget_t {
-    QByteArrayData data[13];
-    char stringdata0[100];
+    QByteArrayData data[14];
+    char stringdata0[104];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,18 +35,19 @@ QT_MOC_LITERAL(2, 13, 0), // ""
 QT_MOC_LITERAL(3, 14, 13), // "login_success"
 QT_MOC_LITERAL(4, 28, 8), // "username"
 QT_MOC_LITERAL(5, 37, 8), // "password"
-QT_MOC_LITERAL(6, 46, 8), // "Identify"
-QT_MOC_LITERAL(7, 55, 2), // "id"
-QT_MOC_LITERAL(8, 58, 6), // "logout"
-QT_MOC_LITERAL(9, 65, 10), // "showResult"
-QT_MOC_LITERAL(10, 76, 4), // "page"
-QT_MOC_LITERAL(11, 81, 12), // "chooseChange"
-QT_MOC_LITERAL(12, 94, 5) // "index"
+QT_MOC_LITERAL(6, 46, 3), // "num"
+QT_MOC_LITERAL(7, 50, 8), // "Identify"
+QT_MOC_LITERAL(8, 59, 2), // "id"
+QT_MOC_LITERAL(9, 62, 6), // "logout"
+QT_MOC_LITERAL(10, 69, 10), // "showResult"
+QT_MOC_LITERAL(11, 80, 4), // "page"
+QT_MOC_LITERAL(12, 85, 12), // "chooseChange"
+QT_MOC_LITERAL(13, 98, 5) // "index"
 
     },
     "Widget\0query\0\0login_success\0username\0"
-    "password\0Identify\0id\0logout\0showResult\0"
-    "page\0chooseChange\0index"
+    "password\0num\0Identify\0id\0logout\0"
+    "showResult\0page\0chooseChange\0index"
 };
 #undef QT_MOC_LITERAL
 
@@ -65,18 +66,18 @@ static const uint qt_meta_data_Widget[] = {
 
  // slots: name, argc, parameters, tag, flags
        1,    0,   44,    2, 0x09 /* Protected */,
-       3,    3,   45,    2, 0x09 /* Protected */,
-       8,    0,   52,    2, 0x09 /* Protected */,
-       9,    1,   53,    2, 0x09 /* Protected */,
-      11,    1,   56,    2, 0x09 /* Protected */,
-      11,    0,   59,    2, 0x29 /* Protected | MethodCloned */,
+       3,    4,   45,    2, 0x09 /* Protected */,
+       9,    0,   54,    2, 0x09 /* Protected */,
+      10,    1,   55,    2, 0x09 /* Protected */,
+      12,    1,   58,    2, 0x09 /* Protected */,
+      12,    0,   61,    2, 0x29 /* Protected | MethodCloned */,
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString, QMetaType::QString, 0x80000000 | 6,    4,    5,    7,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int, 0x80000000 | 7,    4,    5,    6,    8,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,   10,
-    QMetaType::Void, QMetaType::Int,   12,
+    QMetaType::Void, QMetaType::Int,   11,
+    QMetaType::Void, QMetaType::Int,   13,
     QMetaType::Void,
 
        0        // eod
@@ -89,7 +90,7 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->query(); break;
-        case 1: _t->login_success((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< Identify(*)>(_a[3]))); break;
+        case 1: _t->login_success((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< Identify(*)>(_a[4]))); break;
         case 2: _t->logout(); break;
         case 3: _t->showResult((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 4: _t->chooseChange((*reinterpret_cast< int(*)>(_a[1]))); break;

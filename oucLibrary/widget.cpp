@@ -19,6 +19,7 @@ Widget::Widget(QWidget *parent) :
 
     id = Empty;
     ope_aim = Book;
+    memset(oks, true, sizeof(oks));
 
     choose->setGeometry(60, 120, 100, 30);
 
@@ -41,7 +42,7 @@ Widget::Widget(QWidget *parent) :
     lot->setText("注销");
     lot->hide();
 
-    connect(logins, SIGNAL(login_success(QString,QString,Identify)), this, SLOT(login_success(QString,QString,Identify)));
+    connect(logins, SIGNAL(login_success(QString,QString,int,Identify)), this, SLOT(login_success(QString,QString,int,Identify)));
     connect(lot, SIGNAL(clicked(bool)), this, SLOT(logout()));
     connect(userWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
     connect(rootWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
@@ -52,21 +53,21 @@ Widget::Widget(QWidget *parent) :
 void Widget::createShowResult()
 {
     showResults[0]->setGeometry(60, 170, 580, 300);
-    showResults[0]->table->setColumnCount(6);
+    showResults[0]->table->setColumnCount(5);
     for(int i=0; i<5; i++)
-        showResults[0]->table->setColumnWidth(i, 90);
+        showResults[0]->table->setColumnWidth(i, 100);
     QStringList header;
-    header << "书名" << "ISBN号" << "作者" << "出版年份" << "出版社" << "当前状态" ;
+    header << "书名" << "ISBN号" << "作者" << "出版社" << "当前状态" ;
     showResults[0]->table->setHorizontalHeaderLabels(header);
     showResults[0]->table->horizontalHeader()->setStretchLastSection(true);
 
     showResults[1]->setGeometry(60, 170, 580, 300);
-    showResults[1]->table->setColumnCount(5);
+    showResults[1]->table->setColumnCount(6);
     showResults[1]->table->setRowCount(20);
-    for(int i=0; i<4; i++)
-        showResults[1]->table->setColumnWidth(i, 100);
+    for(int i=0; i<5; i++)
+        showResults[1]->table->setColumnWidth(i, 90);
     header.clear();
-    header << "姓名" << "借书名" << "ISBN号" << "借书日期" << "到期时间";
+    header << "姓名" << "学号" << "借书名" << "ISBN号" << "借书日期" << "到期时间";
     showResults[1]->table->setHorizontalHeaderLabels(header);
     showResults[1]->table->horizontalHeader()->setStretchLastSection(true);
 
@@ -100,31 +101,53 @@ void Widget::createRootWidget()
 
 void Widget::initResult(int index)
 {
+    oks[index] = true;
+    if(index != 2)
+        return;
     if(index == 0)
-        return;//file[index] = new DbDemoFileOperate("./book/book.dat");
+        file[index] = new DbDemoFileOperate("./books/books.dat");
     else if(index == 1)
-        return;//file[index] = new DbDemoFileOperate("./borrow/borrow.dat");
+        file[index] = new DbDemoFileOperate("./borrows/borrows.dat");
     else
-        file[index] = new DbDemoFileOperate("./person/person.dat");
+        file[index] = new DbDemoFileOperate("./persons/persons.dat");
     showResults[index]->page->setMaxPage(file[index]->GetCount()/20+(file[index]->GetCount()%20!=0));
     show_id[index].clear();
+    if(index == 1 && id == User)
+    {
+        file[index]->Query((char *)(&num),2,oks[index]);
+        delete file[index];
+        oks[index] = false;
+        file[index] = new DbDemoFileOperate("./borrows/1.dat");
+    }
     for(int i=0;i<min(20, file[index]->GetCount());i++)
     {
-        if(index == 2)
+        if(index == 0)
+        {
+            Books * book = (Books*)file[index]->PrintFile(i+1,1);
+            show_id[index].push_back(book->GetId());
+            showResults[index]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(book->Getname())));
+            showResults[index]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(book->Getisbn())));
+            showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString::fromStdString(book->Getauthor())));
+            showResults[index]->table->setItem(i,3,new QTableWidgetItem(QString::fromStdString(book->Getpress())));
+            showResults[index]->table->setItem(i,4,new QTableWidgetItem(QString("%1/%2").arg(book->Getleft()).arg(book->Getamount())));
+        }
+        else if(index == 1)
+        {
+            Borrows * borrow = (Borrows*)file[index]->PrintFile(i+1,1);
+            showResults[index]->table->setItem(i,4,new QTableWidgetItem(borrow->GetfirstTime().toString("yyyy-MM-dd")));
+            showResults[index]->table->setItem(i,5,new QTableWidgetItem(borrow->GetlastTime().toString("yyyy-MM-dd")));
+        }
+        else if(index == 2)
         {
             Persons * person = (Persons*)file[index]->PrintFile(i+1,1);
-            if(person->GetId() == 0)
-                return;
-            showResults[2]->table->setRowCount(i+1);
             show_id[index].push_back(person->GetId());
-            showResults[2]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(person->Getaccount())));
-            showResults[2]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(person->Getname())));
+            showResults[index]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(person->Getaccount())));
+            showResults[index]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(person->Getname())));
             if(person->Getsex() == 1)
-                showResults[2]->table->setItem(i,2,new QTableWidgetItem(QString("男")));
-            else showResults[2]->table->setItem(i,2,new QTableWidgetItem(QString("女")));
-            showResults[2]->table->setItem(i,3,new QTableWidgetItem(QString::number(person->Getage())));
-            showResults[2]->table->setItem(i,4,new QTableWidgetItem(QString::fromStdString(person->Getphone())));
-            qDebug() << person->Getbirth().toString("yyyy-MM-dd");
+                showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString("男")));
+            else showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString("女")));
+            showResults[index]->table->setItem(i,3,new QTableWidgetItem(QString::number(person->Getage())));
+            showResults[index]->table->setItem(i,4,new QTableWidgetItem(QString::fromStdString(person->Getphone())));
         }
     }
 }
@@ -144,10 +167,11 @@ void Widget::query()
     }
 }
 
-void Widget::login_success(QString username, QString password, Identify id)
+void Widget::login_success(QString username, QString password, int num, Identify id)
 {
     this->username = username;
     this->password = password;
+    this->num = num;
     this->id = id;
     initResult(1);
     log->hide();

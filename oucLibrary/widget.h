@@ -32,7 +32,7 @@ protected:
 
 protected slots:
     void query();
-    void login_success(QString username, QString password, Identify id);
+    void login_success(QString username, QString password, int num, Identify id);
     void logout();
     void showResult(int page);
     void chooseChange(int index = 0);
@@ -46,12 +46,14 @@ private:
     QPushButton * lot;         //注销
     Login * logins;                  //登陆界面
     TableWidget * showResults[3];    //显示查询图书结果,借阅记录,用户列表
+    int oks[3];                      //写到哪个缓存文件
     vector<int> show_id[3];          //对应显示内容的id
     QTabWidget * userWidget;         //显示用户界面
     QTabWidget * rootWidget;         //显示管理员界面
 
     QString username;
     QString password;
+    int num;
     Identify id;
 
     DbDemoFileOperate * file[3];

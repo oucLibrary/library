@@ -21,7 +21,7 @@ public:
     ~Login();
 
 signals:
-    void login_success(QString username, QString password, Identify id = User);
+    void login_success(QString username, QString password, int num, Identify id = User);
 
 protected slots:
     void check();

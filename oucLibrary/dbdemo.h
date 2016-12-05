@@ -21,7 +21,7 @@ public:
     DbDemoFileOperate();  //无特定意义
     DbDemoFileOperate(char *fileName); //实例化一类，打开一个文件名为fileName 的文件
     void FileWrite(DbDemo *demo, int pos = -1,bool ok=false);    //文件写入 moren no cache file and after the file
-    void Query(char *aim,int column,bool ok);  //通过id查询,bool变量表示是否二次搜索
+    void Query(char *aim,int column,bool ok);  //通过id查询,bool变量表示是否二次搜索,从第一列开始
     char* PrintFile (int pageNum, int printNum);//显示数据 bool表示是否是缓存文件中的,int表示取出的条数
     int GetPageCount(int printNum);//输出页码总数，int变量为每页显示的数据条数,bool代表操作是否为缓存文件；
     int GetCount();//输出数据总条数，bool表示操作是否为缓存文件；
@@ -39,15 +39,16 @@ private:
 
 class Books:public DbDemo{
 private:
-    Books(char *tmp);
-    Books(int tid,QString tbookName,int tamount,int tleft, QString tauthor,QString tpress,QString tisbn);
     char name[50];
     int amount;
     int left;//还有多少本可借阅
     char author[20];
     char press[20];
     char isbn[20];
+    char *my_cache;
 public:
+    Books(char *tmp);
+    Books(int tid,QString tbookName,int tamount,int tleft, QString tauthor,QString tpress,QString tisbn);
     int Getamount();
     void Setamount(int tmp);
     int Getleft();
@@ -60,6 +61,7 @@ public:
     void Setpress(QString tmp);
     char *Getisbn();
     void Setisbn(QString tmp);
+    char *Getmy_cache();
 };
 
 class Bookcopy:public DbDemo{
@@ -71,7 +73,9 @@ public:
     void Setlend(int tmp);
     int Getbookid();
     int Getlend();
+    char *Getmy_cache();
 private:
+    char *my_cache;
     int bookid;
     int lend;
 };
@@ -82,8 +86,10 @@ public:
     BookKinds(int tid,QString tkindName);
     void SetkindName(QString tmp);
     char *GetkindName();
+    char *Getmy_cache();
 private:
-    char kindName[50];
+    char kindName[20];
+    char *my_cache;
 };
 
 class Classification:public DbDemo{
@@ -92,11 +98,13 @@ private:
     Classification(char *tmp);
     int bookid;
     int kindid;
+    char *my_cache;
 public:
     int Getbookid();
     void Setbookid(int tmp);
     int Getkindid();
     void Setkindid(int tmp);
+    char *Getmy_cache();
 };
 
 class Persons:public DbDemo{
@@ -109,6 +117,7 @@ private:
     char phone[15];//
     int age;
     QDate birth;
+    char *my_cache;
 public:
     void Setname(QString tmp);
     char *Getname();
@@ -128,6 +137,7 @@ public:
     void Setage(int tmp);
     QDate Getbirth();
     void Setbirth(QDate tmp);
+    char *Getmy_cache();
 };
 
 class Borrows:public DbDemo{
@@ -138,6 +148,7 @@ private:
     int ifLend;
     QDate lastTime;
     int ifReturn;
+    char *my_cache;
 public:
     Borrows(char *);
     Borrows(int tid,int tstudentId,int tbookId,QDate tfirstTime,int tifLend,QDate lastTime,int tifReturn);
@@ -153,12 +164,14 @@ public:
     void SetlastTime(QDate tmp);
     int GetifReturn();
     void SetifReturn(int tmp);
+    char *Getmy_cache();
 };
 
 class Admins:public DbDemo{
 private:
     char account[20];
     char password[20];
+    char *my_cache;
 public:
     Admins(int tid, QString taccount,QString tpassword);
     Admins(char *tmp);
@@ -166,6 +179,7 @@ public:
     void Setaccount(QString tmp);
     char *Getpassword();
     void Setpassword(QString tmp);
+    char *Getmy_cache();
 };
 
 #endif // DBDEMO_H
