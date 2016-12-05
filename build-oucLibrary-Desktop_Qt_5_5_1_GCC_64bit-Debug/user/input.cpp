@@ -6,7 +6,7 @@ int main()
 	file.open("user.dat", ios::out);
 	if(file.is_open())
 		cout<<"open success!"<<endl;
-	int currId=0;
+	int currId=1;
 	file.write((char *)(&currId),sizeof(int));
 	int colnum=9;
 	file.write((char *)(&colnum),sizeof(int));

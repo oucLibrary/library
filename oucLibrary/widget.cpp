@@ -1,4 +1,5 @@
 #include "widget.h"
+#include "dbdemo.h"
 
 #include <QPainter>
 #include <QFont>
@@ -45,34 +46,37 @@ Widget::Widget(QWidget *parent) :
     connect(userWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
     connect(rootWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
     chooseChange();
+    initResult(0);
 }
 
 void Widget::createShowResult()
 {
     showBookResult->setGeometry(60, 170, 580, 300);
-    showBookResult->table->setColumnCount(5);
-    for(int i=0; i<4; i++)
-        showBookResult->table->setColumnWidth(i, 120);
+    showBookResult->table->setColumnCount(6);
+    for(int i=0; i<5; i++)
+        showBookResult->table->setColumnWidth(i, 90);
     QStringList header;
-    header << "书名" << "作者" << "出版年份" << "出版社" << "可借阅数量" ;
+    header << "书名" << "ISBN号" << "作者" << "出版年份" << "出版社" << "当前状态" ;
     showBookResult->table->setHorizontalHeaderLabels(header);
     showBookResult->table->horizontalHeader()->setStretchLastSection(true);
 
     showBorrowResult->setGeometry(60, 170, 580, 300);
     showBorrowResult->table->setColumnCount(5);
+    showBorrowResult->table->setRowCount(20);
     for(int i=0; i<4; i++)
-        showBorrowResult->table->setColumnWidth(i, 120);
+        showBorrowResult->table->setColumnWidth(i, 100);
     header.clear();
-    header << "姓名" << "借书名" << "借书日期" << "到期时间" << "还书时间";
+    header << "姓名" << "借书名" << "ISBN号" << "借书日期" << "到期时间";
     showBorrowResult->table->setHorizontalHeaderLabels(header);
     showBorrowResult->table->horizontalHeader()->setStretchLastSection(true);
 
     showUserResult->setGeometry(60, 170, 580, 300);
-    showUserResult->table->setColumnCount(4);
-    for(int i=0; i<3; i++)
-        showUserResult->table->setColumnWidth(i, 150);
+    showUserResult->table->setColumnCount(5);
+    showUserResult->table->setRowCount(20);
+    for(int i=0; i<4; i++)
+        showUserResult->table->setColumnWidth(i, 100);
     header.clear();
-    header << "姓名" << "帐号" << "密码" << "电话";
+    header << "学号" << "姓名" << "性别" << "年龄" << "电话";
     showUserResult->table->setHorizontalHeaderLabels(header);
     showUserResult->table->horizontalHeader()->setStretchLastSection(true);
 }
@@ -92,6 +96,61 @@ void Widget::createRootWidget()
     rootWidget->addTab(showBorrowResult, QIcon(), "借阅记录");
     rootWidget->addTab(showUserResult,QIcon(), "用户管理");
     rootWidget->show();
+}
+
+void Widget::initResult(int index)
+{
+    if(index == 0)
+    {
+        return;
+    }
+    else if(index == 1)
+    {
+        return;
+    }
+    else
+    {
+        DbDemoFileOperate * file = new DbDemoFileOperate("./user/user.dat");
+        showUserResult->page->setMaxPage(file->GetCount()/20+(file->GetCount()%20!=0));
+        char * ans = new char[5000];
+        ans = file->PrintFile(1, 20);
+        show_id[index].clear();
+        for(int i=0;i<20;i++)
+        {
+            int newid = *((int*)ans);
+            if(newid == 0)
+                break;
+            show_id[index].push_back(newid);
+            ans += sizeof(int);
+            char name[50];
+            for(int j=0; j<50; j++)
+                name[j]=ans[j];
+            ans += 50;
+            char account[20];
+            for(int j=0; j<20; j++)
+                account[j] = ans[j];
+            ans += 20;
+            ans += 20;//跳过password
+            char sex = ans[0];
+            ans ++;
+            ans += 50;//跳过email
+            char phone[15];
+            for(int j=0; j<15; j++)
+                phone[j] = ans[j];
+            ans += 15;
+            int age = *((int*)ans);
+            ans += sizeof(int)+sizeof(QDate);
+            show_id[index].push_back(newid);
+            showUserResult->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(account)));
+            showUserResult->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(name)));
+            if(sex == 'M')
+                showUserResult->table->setItem(i,2,new QTableWidgetItem(QString("男")));
+            else showUserResult->table->setItem(i,2,new QTableWidgetItem(QString("女")));
+            showUserResult->table->setItem(i,3,new QTableWidgetItem(QString::number(age)));
+            showUserResult->table->setItem(i,4,new QTableWidgetItem(QString::fromStdString(phone)));
+            showUserResult->table->setRowCount(i+1);
+        }
+    }
 }
 
 void Widget::query()
@@ -114,13 +173,17 @@ void Widget::login_success(QString username, QString password, Identify id)
     this->username = username;
     this->password = password;
     this->id = id;
+    initResult(1);
     log->hide();
     showName->setText(username);
     showName->show();
     if(id == User)
         createUserWidget();
     else
+    {
         createRootWidget();
+        initResult(2);
+    }
     lot->show();
 }
 
@@ -159,18 +222,24 @@ void Widget::chooseChange(int index)
     choose->clear();
     if(index == 0)
     {
+        ope_aim = Book;
         choose->addItem("作者");
         choose->addItem("书名");
         choose->addItem("分类");
     }
-    else if(index == 1 && id == Root)
+    else if(index == 1)
     {
-        choose->addItem("姓名");
-        choose->addItem("书名");
-        choose->addItem("帐号");
+        ope_aim = Borrow;
+        if(id == Root)
+        {
+            choose->addItem("姓名");
+            choose->addItem("书名");
+            choose->addItem("帐号");
+        }
     }
     else if(index == 2)
     {
+        ope_aim = Person;
         choose->addItem("姓名");
         choose->addItem("帐号");
     }

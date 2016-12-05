@@ -230,7 +230,7 @@ void Classification::Setkindid(int tmp){
     kindid=tmp;
 }
 
-Persons::Persons(int id, string name, char account[], char password[], bool sex,
+Persons::Persons(int id, string name, char account[], char password[], char sex,
     char email[], char phone[], int age, QDate birth): DbDemo(id, name), sex(sex),age(age),birth(birth)
 {
     for(int i=0;i<20;i++)

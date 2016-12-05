@@ -85,19 +85,19 @@ void Login::check()
         /*string name;
         for(int i=0;i<50;i++)
             name.push_back(0);
-        name="你好世界";
+        name="世界你好";
         char account[20];
         memset(account,0,sizeof(account));
         char passwo[20];
         memset(passwo,0,sizeof(passwo));
-        strcpy(account, "14020031345");
+        strcpy(account, "14020031543");
         strcpy(passwo,"123456");
         char email[50];
         memset(email,0,sizeof(email));
-        strcpy(email,"123457689@qq.com");
+        strcpy(email,"123456789@qq.com");
         char phone[15];
         memset(phone,0,sizeof(phone));
-        strcpy(phone,"17854283245");
+        strcpy(phone,"17854282345");
         Persons * person = new Persons(0,name,account,passwo,'M',email,phone,21,QDate(1996,8,25));
         file->FileWrite((DbDemo *)person);*/
         for(int i=1; i<=file->GetCount(); i++)

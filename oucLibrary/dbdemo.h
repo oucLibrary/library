@@ -78,7 +78,7 @@ private:
     int age;
     QDate birth;
 public:
-    Persons(int id,string name,char account[20],char password[20],bool sex,char email[50],char phone[15],int age,QDate birth);
+    Persons(int id, string name, char account[20], char password[20], char sex, char email[50], char phone[15], int age, QDate birth);
     char *Getaccount();
     void Setaccount(char *tmp);
     char *Getpassword();

@@ -24,6 +24,7 @@ public:
     void createShowResult();
     void createUserWidget();
     void createRootWidget();
+    void initResult(int index);
     ~Widget();
 
 protected:
@@ -47,6 +48,7 @@ private:
     TableWidget * showBookResult;    //显示查询图书结果
     TableWidget * showBorrowResult;  //显示借阅记录
     TableWidget * showUserResult;    //显示用户列表
+    vector<int> show_id[3];          //对应显示内容的id
     QTabWidget * userWidget;         //显示用户界面
     QTabWidget * rootWidget;         //显示管理员界面
 
