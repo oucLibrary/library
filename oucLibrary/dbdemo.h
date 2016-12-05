@@ -40,15 +40,18 @@ private:
 class Books:public DbDemo{
 private:
     Books(char *tmp);
-    Books(int tid,QString tbookName,int tamount,QString tauthor,QString tpress,QString tisbn);
+    Books(int tid,QString tbookName,int tamount,int tleft, QString tauthor,QString tpress,QString tisbn);
     char name[50];
     int amount;
+    int left;//还有多少本可借阅
     char author[20];
     char press[20];
     char isbn[20];
 public:
     int Getamount();
     void Setamount(int tmp);
+    int Getleft();
+    void Setleft(int tleft);
     char *Getauthor();
     void Setname(QString tmp);
     char *Getname();

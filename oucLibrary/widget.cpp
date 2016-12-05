@@ -107,17 +107,15 @@ void Widget::initResult(int index)
     else
         file[index] = new DbDemoFileOperate("./person/person.dat");
     showResults[index]->page->setMaxPage(file[index]->GetCount()/20+(file[index]->GetCount()%20!=0));
-    char * ans = new char[5000];
-    //ans = file[index]->PrintFile(1, 20);
     show_id[index].clear();
-    for(int i=0;i<20;i++)
+    for(int i=0;i<min(20, file[index]->GetCount());i++)
     {
-        qDebug() << i<< endl;
         if(index == 2)
         {
             Persons * person = (Persons*)file[index]->PrintFile(i+1,1);
             if(person->GetId() == 0)
                 return;
+            showResults[2]->table->setRowCount(i+1);
             show_id[index].push_back(person->GetId());
             showResults[2]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(person->Getaccount())));
             showResults[2]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(person->Getname())));
@@ -126,8 +124,6 @@ void Widget::initResult(int index)
             else showResults[2]->table->setItem(i,2,new QTableWidgetItem(QString("女")));
             showResults[2]->table->setItem(i,3,new QTableWidgetItem(QString::number(person->Getage())));
             showResults[2]->table->setItem(i,4,new QTableWidgetItem(QString::fromStdString(person->Getphone())));
-            showResults[2]->table->setRowCount(i+1);
-            //ans += sizeof(int)*3+133;
             qDebug() << person->Getbirth().toString("yyyy-MM-dd");
         }
     }

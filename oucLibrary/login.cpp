@@ -63,18 +63,9 @@ void Login::check()
     {
         id = User;
         DbDemoFileOperate * file = new DbDemoFileOperate("./person/person.dat");
-        /*QString account,passwd,name,email,phone;
-        QDate birth(1996,5,7);
-        account="14020031345\0\0\0\0\0\0\0\0\0";
-        passwd="123456";
-        name="你好世界";
-        email="123457689@qq.com";
-        phone="17854284345\0\0\0\0";
-        Persons * person = new Persons(0, account, passwd, name, 1, email, phone, 21, birth);
-        file->FileWrite((DbDemo *)person);*/
         for(int i=1; i<=file->GetCount(); i++)
         {
-            Persons * person = new Persons(file->PrintFile(i,1));
+            Persons * person = (Persons *)file->PrintFile(i,1);
             if(!strcmp(person->Getaccount(), username->text().toStdString().c_str()))
                 if(!strcmp(person->Getpassword(), password->text().toStdString().c_str()))
                 {

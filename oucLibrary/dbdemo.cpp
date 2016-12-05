@@ -195,9 +195,10 @@ void DbDemoFileOperate::Order(int column)
     int len=GetCount();
     make_order(0,len-1,file,column,col);
 }
-Books::Books(int tid,QString tname,int tamount,QString tauthor,QString tpress,QString tisbn):DbDemo(tid){
+Books::Books(int tid, QString tname, int tamount, int tleft, QString tauthor, QString tpress, QString tisbn):DbDemo(tid){
     Setname(tname);
     Setamount(tamount);
+    Setleft(tleft);
     Setauthor(tauthor);
     Setpress(tpress);
     Setisbn(tisbn);
@@ -239,6 +240,14 @@ int Books::Getamount(){
 
 void Books::Setamount(int tmp){
     amount=tmp;
+}
+
+int Books::Getleft(){
+    return left;
+}
+
+void Books::Setleft(int tleft){
+    left=tleft;
 }
 
 char *Books::Getisbn(){
