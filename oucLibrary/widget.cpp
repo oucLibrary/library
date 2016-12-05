@@ -112,7 +112,6 @@ void Widget::initResult(int index)
     show_id[index].clear();
     for(int i=0;i<20;i++)
     {
-        qDebug() << i<< endl;
         if(index == 2)
         {
             Persons * person = (Persons*)file[index]->PrintFile(i+1,1);
