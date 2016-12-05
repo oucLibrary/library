@@ -30,6 +30,7 @@ DbDemoFileOperate::DbDemoFileOperate(char *fileName)
         QMessageBox * messagebox = new QMessageBox();
         messagebox->setText("打开文件失败");
         messagebox->exec();
+        exit(0);
     }
     file.seekg(0, ios::beg);
     file.read((char *)(&currId), sizeof(int));

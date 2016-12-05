@@ -57,7 +57,7 @@ static const uint qt_meta_data_Widget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -65,18 +65,20 @@ static const uint qt_meta_data_Widget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   44,    2, 0x09 /* Protected */,
-       3,    4,   45,    2, 0x09 /* Protected */,
-       9,    0,   54,    2, 0x09 /* Protected */,
-      10,    1,   55,    2, 0x09 /* Protected */,
-      12,    1,   58,    2, 0x09 /* Protected */,
-      12,    0,   61,    2, 0x29 /* Protected | MethodCloned */,
+       1,    0,   49,    2, 0x09 /* Protected */,
+       3,    4,   50,    2, 0x09 /* Protected */,
+       9,    0,   59,    2, 0x09 /* Protected */,
+      10,    1,   60,    2, 0x09 /* Protected */,
+      10,    0,   63,    2, 0x29 /* Protected | MethodCloned */,
+      12,    1,   64,    2, 0x09 /* Protected */,
+      12,    0,   67,    2, 0x29 /* Protected | MethodCloned */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int, 0x80000000 | 7,    4,    5,    6,    8,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   11,
+    QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   13,
     QMetaType::Void,
 
@@ -93,8 +95,9 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 1: _t->login_success((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< Identify(*)>(_a[4]))); break;
         case 2: _t->logout(); break;
         case 3: _t->showResult((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->chooseChange((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 5: _t->chooseChange(); break;
+        case 4: _t->showResult(); break;
+        case 5: _t->chooseChange((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->chooseChange(); break;
         default: ;
         }
     }
@@ -125,13 +128,13 @@ int Widget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 7)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }

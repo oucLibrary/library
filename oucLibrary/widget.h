@@ -34,7 +34,7 @@ protected slots:
     void query();
     void login_success(QString username, QString password, int num, Identify id);
     void logout();
-    void showResult(int page);
+    void showResult(int page = 1);
     void chooseChange(int index = 0);
 
 private:

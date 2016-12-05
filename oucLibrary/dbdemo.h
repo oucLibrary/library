@@ -27,9 +27,9 @@ public:
     int GetCount();//输出数据总条数，bool表示操作是否为缓存文件；
     void Order(int column); //对缓存文件排序，若无缓存文件则复制原文件作为缓存文件；
     bool Getbyid(int tid);  //按照id查询，如果能查找到返回true，否则返回false。如果查找不到，tmp_sto为NULL，否则查找结果存储在tmp_sto。
+    char *tmp_sto;          //存储按照id查询结果的一条记录的缓存
 private:
     fstream file;
-    char *tmp_sto;          //存储按照id查询结果的一条记录的缓存
     char * aim;
     int currId;             //当前id
     int colnum;             //列数
@@ -39,8 +39,6 @@ private:
 
 class Books:public DbDemo{
 private:
-    Books(char *tmp);
-    Books(int tid,QString tbookName,int tamount,int tleft, QString tauthor,QString tpress,QString tisbn);
     char name[50];
     int amount;
     int left;//还有多少本可借阅
@@ -48,6 +46,8 @@ private:
     char press[20];
     char isbn[20];
 public:
+    Books(char *tmp);
+    Books(int tid,QString tbookName,int tamount,int tleft, QString tauthor,QString tpress,QString tisbn);
     int Getamount();
     void Setamount(int tmp);
     int Getleft();

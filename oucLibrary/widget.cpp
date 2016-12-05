@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QAction>
 #include <QHeaderView>
+#include <QMessageBox>
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent), choose(new QComboBox(this)), context(new QLineEdit(this)), start(new QPushButton(this)),
@@ -102,60 +103,34 @@ void Widget::createRootWidget()
 void Widget::initResult(int index)
 {
     oks[index] = true;
-    if(index != 2)
-        return;
     if(index == 0)
-        file[index] = new DbDemoFileOperate("./books/books.dat");
+        file[index] = new DbDemoFileOperate((char *)"./books/books.dat");
     else if(index == 1)
-        file[index] = new DbDemoFileOperate("./borrows/borrows.dat");
+        file[index] = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
     else
-        file[index] = new DbDemoFileOperate("./persons/persons.dat");
-    showResults[index]->page->setMaxPage(file[index]->GetCount()/20+(file[index]->GetCount()%20!=0));
-    show_id[index].clear();
+        file[index] = new DbDemoFileOperate((char *)"./persons/persons.dat");
     if(index == 1 && id == User)
     {
         file[index]->Query((char *)(&num),2,oks[index]);
         delete file[index];
         oks[index] = false;
-        file[index] = new DbDemoFileOperate("./borrows/1.dat");
+        file[index] = new DbDemoFileOperate((char *)"./borrows/1.dat");
     }
-    for(int i=0;i<min(20, file[index]->GetCount());i++)
-    {
-        if(index == 0)
-        {
-            Books * book = (Books*)file[index]->PrintFile(i+1,1);
-            show_id[index].push_back(book->GetId());
-            showResults[index]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(book->Getname())));
-            showResults[index]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(book->Getisbn())));
-            showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString::fromStdString(book->Getauthor())));
-            showResults[index]->table->setItem(i,3,new QTableWidgetItem(QString::fromStdString(book->Getpress())));
-            showResults[index]->table->setItem(i,4,new QTableWidgetItem(QString("%1/%2").arg(book->Getleft()).arg(book->Getamount())));
-        }
-        else if(index == 1)
-        {
-            Borrows * borrow = (Borrows*)file[index]->PrintFile(i+1,1);
-            showResults[index]->table->setItem(i,4,new QTableWidgetItem(borrow->GetfirstTime().toString("yyyy-MM-dd")));
-            showResults[index]->table->setItem(i,5,new QTableWidgetItem(borrow->GetlastTime().toString("yyyy-MM-dd")));
-        }
-        else if(index == 2)
-        {
-            Persons * person = (Persons*)file[index]->PrintFile(i+1,1);
-            show_id[index].push_back(person->GetId());
-            showResults[index]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(person->Getaccount())));
-            showResults[index]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(person->Getname())));
-            if(person->Getsex() == 1)
-                showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString("男")));
-            else showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString("女")));
-            showResults[index]->table->setItem(i,3,new QTableWidgetItem(QString::number(person->Getage())));
-            showResults[index]->table->setItem(i,4,new QTableWidgetItem(QString::fromStdString(person->Getphone())));
-        }
-    }
+    showResults[index]->page->setMaxPage(file[index]->GetCount()/20+(file[index]->GetCount()%20!=0));
+    connect(showResults[index]->page,SIGNAL(currentPageChanged(int)),this,SLOT(showResult(int)));
 }
 
 void Widget::query()
 {
     delete file[ope_aim];
-    file[ope_aim] = new DbDemoFileOperate((char *)"book.dat");
+    if(ope_aim == Book)
+    {
+        file[ope_aim] = new DbDemoFileOperate((char *)"./books/books.dat");
+    }
+    else if(ope_aim == Borrow)
+        file[ope_aim] = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
+    else
+        file[ope_aim] = new DbDemoFileOperate((char *)"./persons/persons.dat");
     file[ope_aim]->Query((char *)"c++", 3, false);
     delete result[ope_aim];
     result[ope_aim] = new DbDemoFileOperate((char *)"1.dat");
@@ -214,11 +189,77 @@ void Widget::logout()
 
 void Widget::showResult(int page)
 {
-    char * aim = result[ope_aim]->PrintFile(page, 15);
+    Ope_aim index = ope_aim;
+    show_id[index].clear();
+    for(int i=0;i<min(20, file[index]->GetCount()-20*(page-1));i++)
+    {
+        if(index == 0)
+        {
+            Books * book = new Books(file[index]->PrintFile(i+1+20*(page-1),1));
+            show_id[index].push_back(book->GetId());
+            showResults[index]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(book->Getname())));
+            showResults[index]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(book->Getisbn())));
+            showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString::fromStdString(book->Getauthor())));
+            showResults[index]->table->setItem(i,3,new QTableWidgetItem(QString::fromStdString(book->Getpress())));
+            showResults[index]->table->setItem(i,4,new QTableWidgetItem(QString("%1/%2").arg(book->Getleft()).arg(book->Getamount())));
+        }
+        else if(index == 1)
+        {
+            Borrows * borrow = new Borrows(file[index]->PrintFile(i+1+20*(page-1),1));
+            showResults[index]->table->setItem(i,4,new QTableWidgetItem(borrow->GetfirstTime().toString("yyyy-MM-dd")));
+            showResults[index]->table->setItem(i,5,new QTableWidgetItem(borrow->GetlastTime().toString("yyyy-MM-dd")));
+            DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./bookcopy/bookcopy.dat");
+            if(!cache->Getbyid(borrow->GetbookId()))
+            {
+                QMessageBox * mess = new QMessageBox();
+                mess->setText("数据出错");
+                mess->exec();
+                exit(0);
+            }
+            Bookcopy * bookcopy = new Bookcopy(cache->tmp_sto);
+            delete cache;
+            cache = new DbDemoFileOperate((char *)"./books/books.dat");
+            if(!cache->Getbyid(bookcopy->Getbookid()))
+            {
+                QMessageBox * mess = new QMessageBox();
+                mess->setText("数据出错");
+                mess->exec();
+                exit(0);
+            }
+            Books * book = new Books(cache->tmp_sto);
+            showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString::fromStdString(book->Getname())));
+            showResults[index]->table->setItem(i,3,new QTableWidgetItem(QString::fromStdString(book->Getisbn())));
+            delete cache;
+            cache = new DbDemoFileOperate((char *)"./persons/persons.dat");
+            if(!cache->Getbyid(borrow->GetstudentId()))
+            {
+                QMessageBox * mess = new QMessageBox();
+                mess->setText("数据出错");
+                mess->exec();
+                exit(0);
+            }
+            Persons * person = new Persons(cache->tmp_sto);
+            showResults[index]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(person->Getname())));
+            showResults[index]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(person->Getaccount())));
+        }
+        else if(index == 2)
+        {
+            Persons * person = new Persons(file[index]->PrintFile(i+1+20*(page-1),1));
+            show_id[index].push_back(person->GetId());
+            showResults[index]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(person->Getaccount())));
+            showResults[index]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(person->Getname())));
+            if(person->Getsex() == 1)
+                showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString("男")));
+            else showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString("女")));
+            showResults[index]->table->setItem(i,3,new QTableWidgetItem(QString::number(person->Getage())));
+            showResults[index]->table->setItem(i,4,new QTableWidgetItem(QString::fromStdString(person->Getphone())));
+        }
+    }
 }
 
 void Widget::chooseChange(int index)
 {
+    showResult();
     choose->clear();
     if(index == 0)
     {
