@@ -26,9 +26,10 @@ public:
     int GetPageCount(int printNum);//输出页码总数，int变量为每页显示的数据条数,bool代表操作是否为缓存文件；
     int GetCount();//输出数据总条数，bool表示操作是否为缓存文件；
     void Order(int column); //对缓存文件排序，若无缓存文件则复制原文件作为缓存文件；
+    bool Getbyid(int tid);  //按照id查询，如果能查找到返回true，否则返回false。如果查找不到，tmp_sto为NULL，否则查找结果存储在tmp_sto。
 private:
     fstream file;
-
+    char *tmp_sto;          //存储按照id查询结果的一条记录的缓存
     char * aim;
     int currId;             //当前id
     int colnum;             //列数

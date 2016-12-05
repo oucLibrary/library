@@ -173,6 +173,23 @@ void make_order(int st,int ed,fstream &file,int column,vector<int>&col){
     }
 }
 
+bool DbDemoFileOperate::Getbyid(int tid){
+    delete tmp_sto;
+    file.seekg(sizeof(int)*(colnum+3),ios::beg);
+    char tmp[col[colnum]+10];
+    while(file.read(tmp,col[colnum])){
+        int cur_id=*((int *)tmp);
+        if(cur_id==tid){
+            tmp_sto=new char[col[colnum]+10];
+            for(int i=0;i<col[colnum];i++){
+                tmp_sto[i]=tmp[i];
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
 void DbDemoFileOperate::Order(int column)
 {
     int len=GetCount();
