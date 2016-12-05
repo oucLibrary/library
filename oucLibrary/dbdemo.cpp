@@ -119,6 +119,10 @@ int DbDemoFileOperate::GetPageCount(int per_page_num)
     return GetCount()/per_page_num+(GetCount()%per_page_num!=0);
 }
 
+char *DbDemoFileOperate::Gettmp_sto(){
+    return tmp_sto;
+}
+
 void make_order(int st,int ed,fstream &file,int column,vector<int>&col){
     if(st!=ed){
         int siz=col.size();
