@@ -202,7 +202,9 @@ Books::Books(int tid,QString tname,int tamount,QString tauthor,QString tpress,QS
     Setpress(tpress);
     Setisbn(tisbn);
 }
-Books::Books(char *tmp):DbDemo(tmp){
+Books::Books(char *tmp){
+    *this=*(Books*)tmp;
+    /*
     tmp+=sizeof(int);
     amount=*((int *)tmp);
     tmp+=sizeof(int);
@@ -218,6 +220,7 @@ Books::Books(char *tmp):DbDemo(tmp){
         isbn[i]=*tmp;
         tmp++;
     }
+    */
 }
 
 char *Books::Getname(){
@@ -276,11 +279,14 @@ Bookcopy::Bookcopy(int tid,int tbookid,int tlend):DbDemo(tid){
     lend=tlend;
 }
 
-Bookcopy::Bookcopy(char *tmp):DbDemo(tmp){
+Bookcopy::Bookcopy(char *tmp){
+    *this=*(Bookcopy*)tmp;
+    /*
     tmp+=sizeof(int);
     bookid=*((int *)tmp);
     tmp+=sizeof(int);
     lend=*((int *)tmp);
+    */
 }
 
 void Bookcopy::Setbookid(int tmp){
@@ -300,12 +306,15 @@ int Bookcopy::Getlend(){
 }
 
 
-BookKinds::BookKinds(char *tmp):DbDemo(tmp){
+BookKinds::BookKinds(char *tmp){
+    *this=*(BookKinds*)tmp;
+    /*
     tmp+=sizeof(int);
     for(int i=0;i<50;i++){
         kindName[i]=*tmp;
         tmp++;
     }
+    */
 }
 
 BookKinds::BookKinds(int tid,QString tkindName):DbDemo(tid){
@@ -327,11 +336,14 @@ Classification::Classification(int tid,int tbookid,int tkindid):DbDemo(tid){
     kindid=tkindid;
 }
 
-Classification::Classification(char *tmp):DbDemo(tmp){
+Classification::Classification(char *tmp){
+    *this=*(Classification*)tmp;
+    /*
     tmp+=sizeof(int);
     bookid=*((int *)tmp);
     tmp+=sizeof(int);
     kindid=*((int *)tmp);
+    */
 }
 
 int Classification::Getbookid(){
@@ -360,7 +372,9 @@ Persons::Persons(int tid,QString taccount,QString tpassword,QString tname,int ts
     Setage(tage);
     Setbirth(tbirth);
 }
-Persons::Persons(char *tmp):DbDemo(tmp){
+Persons::Persons(char *tmp){
+    *this=*(Persons*)tmp;
+    /*
     tmp+=sizeof(int);
     for(int i=0;i<20;i++){
         account[i]=*tmp;
@@ -387,6 +401,7 @@ Persons::Persons(char *tmp):DbDemo(tmp){
     age=*((int *)tmp);
     tmp+=sizeof(int);
     birth=*((QDate*)tmp);
+    */
 }
 
 char *Persons::Getaccount(){
@@ -464,7 +479,9 @@ void Persons::Setname(QString tmp){
     }
 }
 
-Borrows::Borrows(char *tmp):DbDemo(tmp){
+Borrows::Borrows(char *tmp){
+    *this=*(Borrows*)tmp;
+    /*
     tmp+=sizeof(int);
     studentId=*((int *)tmp);
     tmp+=sizeof(int);
@@ -478,6 +495,7 @@ Borrows::Borrows(char *tmp):DbDemo(tmp){
     tmp+=sizeof(QDate);
     ifReturn=*((int *)tmp);
     tmp+=sizeof(int);
+    */
 }
 
 Borrows::Borrows(int tid,int tstudentId,int tbookId,QDate tfirstTime,int tifLend,QDate tlastTime,int tifReturn):DbDemo(tid){
@@ -542,7 +560,9 @@ Admins::Admins(int tid, QString taccount,QString tpassword):DbDemo(tid){
     Setpassword(tpassword);
 }
 
-Admins::Admins(char *tmp):DbDemo(tmp){
+Admins::Admins(char *tmp){
+    *this=*(Admins*)tmp;
+    /*
     tmp+=sizeof(int);
     for(int i=0;i<20;i++){
         account[i]=*tmp;
@@ -552,6 +572,7 @@ Admins::Admins(char *tmp):DbDemo(tmp){
         password[i]=*tmp;
         tmp++;
     }
+    */
 }
 
 char *Admins::Getaccount(){
