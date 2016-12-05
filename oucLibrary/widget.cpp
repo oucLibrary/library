@@ -110,45 +110,27 @@ void Widget::initResult(int index)
     }
     else
     {
-        DbDemoFileOperate * file = new DbDemoFileOperate("./user/user.dat");
+        DbDemoFileOperate * file = new DbDemoFileOperate("./person/person.dat");
         showUserResult->page->setMaxPage(file->GetCount()/20+(file->GetCount()%20!=0));
         char * ans = new char[5000];
         ans = file->PrintFile(1, 20);
         show_id[index].clear();
         for(int i=0;i<20;i++)
         {
-            int newid = *((int*)ans);
-            if(newid == 0)
-                break;
-            show_id[index].push_back(newid);
-            ans += sizeof(int);
-            char name[50];
-            for(int j=0; j<50; j++)
-                name[j]=ans[j];
-            ans += 50;
-            char account[20];
-            for(int j=0; j<20; j++)
-                account[j] = ans[j];
-            ans += 20;
-            ans += 20;//跳过password
-            char sex = ans[0];
-            ans ++;
-            ans += 50;//跳过email
-            char phone[15];
-            for(int j=0; j<15; j++)
-                phone[j] = ans[j];
-            ans += 15;
-            int age = *((int*)ans);
-            ans += sizeof(int)+sizeof(QDate);
-            show_id[index].push_back(newid);
-            showUserResult->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(account)));
-            showUserResult->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(name)));
-            if(sex == 'M')
+            Persons * person = new Persons(ans);
+            if(person->GetId() == 0)
+                return;
+            show_id[index].push_back(person->GetId());
+            showUserResult->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(person->Getaccount())));
+            showUserResult->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(person->Getname())));
+            if(person->Getsex() == 1)
                 showUserResult->table->setItem(i,2,new QTableWidgetItem(QString("男")));
             else showUserResult->table->setItem(i,2,new QTableWidgetItem(QString("女")));
-            showUserResult->table->setItem(i,3,new QTableWidgetItem(QString::number(age)));
-            showUserResult->table->setItem(i,4,new QTableWidgetItem(QString::fromStdString(phone)));
+            showUserResult->table->setItem(i,3,new QTableWidgetItem(QString::number(person->Getage())));
+            showUserResult->table->setItem(i,4,new QTableWidgetItem(QString::fromStdString(person->Getphone())));
             showUserResult->table->setRowCount(i+1);
+            ans += sizeof(int)*3+133;
+            qDebug() << person->Getbirth().toString("yyyy-MM-dd");
         }
     }
 }

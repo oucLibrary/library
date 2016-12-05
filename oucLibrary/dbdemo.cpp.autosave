@@ -384,11 +384,9 @@ Persons::Persons(char *tmp):DbDemo(tmp){
         phone[i]=*tmp;
         tmp++;
     }
-    birth=*((QDate*)tmp);
-    tmp+=sizeof(QDate);
     age=*((int *)tmp);
     tmp+=sizeof(int);
-
+    birth=*((QDate*)tmp);
 }
 
 char *Persons::Getaccount(){
