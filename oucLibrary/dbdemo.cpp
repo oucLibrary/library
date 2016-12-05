@@ -103,7 +103,7 @@ void DbDemoFileOperate::Query(char *aim, int column, bool ok)
 }
 char* DbDemoFileOperate::PrintFile(int pageNum, int printNum)
 {
-    file.seekp(sizeof(int)*(colnum+3)+col[colnum]*printNum*(pageNum-1),ios::beg);
+    file.seekg(sizeof(int)*(colnum+3)+col[colnum]*printNum*(pageNum-1),ios::beg);
     file.read(aim,col[colnum]*printNum);
     return aim;
 }
