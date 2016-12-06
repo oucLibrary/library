@@ -213,7 +213,7 @@ void Widget::query()
                 else
                 {
                     cache2->Getbyid(classification->Getbookid());
-                    file[ope_aim]->FileWrite((DbDemo *)cache2->Gettmp_sto(),-1,true);
+                    file[ope_aim]->FileWrite(cache2->Gettmp_sto(),-1,true);
                 }
             }
         }
