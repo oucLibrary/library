@@ -18,14 +18,17 @@ SOURCES += main.cpp\
     login.cpp \
     register.cpp \
     tablewidget.cpp \
-    PageWidget.cpp
+    PageWidget.cpp \
+    changeperson.cpp
 
 HEADERS  += widget.h \
     dbdemo.h \
     login.h \
     register.h \
     tablewidget.h \
-    pagewidget.h
+    pagewidget.h \
+    changeperson.h
 
 FORMS    += \
-    PageWidget.ui
+    PageWidget.ui \
+    changeperson.ui
