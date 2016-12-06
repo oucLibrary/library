@@ -97,12 +97,12 @@ private:
 
 class Classification:public DbDemo{
 private:
-    Classification(int tid,int tbookid,int tkindid);
-    Classification(char *tmp);
     int bookid;
     int kindid;
     char *my_cache;
 public:
+    Classification(int tid,int tbookid,int tkindid);
+    Classification(char *tmp);
     int Getbookid();
     void Setbookid(int tmp);
     int Getkindid();

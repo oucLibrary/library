@@ -174,8 +174,50 @@ void Widget::query()
                 file[ope_aim] = new DbDemoFileOperate((char *)"./books/2.dat");
             }
             oks[ope_aim] = !oks[ope_aim];
-            showResult();
         }
+        else if(choose->currentIndex() == 2)
+        {
+            //multiQuery("./bookkinds/bookkinds.dat",aim,2,"./bookkinds/1.dat",);
+            DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./bookkinds/bookkinds.dat");
+            cache->Query(aim, 2, (char *)"./bookkinds/1.dat");
+            delete cache;
+            cache = new DbDemoFileOperate((char *)"./bookkinds/1.dat");
+            if(cache->GetCount() == 0)
+            {
+                QMessageBox::warning(this,"查找分类失败","没有该分类");
+                return;
+            }
+            BookKinds * bookkinds = new BookKinds(cache->PrintFile(1,1));
+            int kindid = bookkinds->GetId();
+            delete cache;
+            cache = new DbDemoFileOperate((char *)"./classification/classification.dat");
+            cache->Query((char *)(&kindid), 3, (char *)"./classification/1.dat");
+            delete cache;
+            cache = new DbDemoFileOperate((char *)"./classification/1.dat");
+            if(cache->GetCount() == 0)
+            {
+                QMessageBox::warning(this,"没有查询到目标","查询结果为空");
+                return;
+            }
+            DbDemoFileOperate * cache2 = new DbDemoFileOperate("./books/books.dat");
+            Classification * classification;
+            for(int i=1; i<=cache->GetCount(); i++)
+            {
+                classification = new Classification(cache->PrintFile(i,1));
+                if(i == 1)
+                {
+                    int bookid = classification->Getbookid();
+                    cache2->Query((char *)(&bookid), 1, "./books/1.dat");
+                    file[ope_aim] = new DbDemoFileOperate("./books/1.dat");
+                }
+                else
+                {
+                    cache2->Getbyid(classification->Getbookid());
+                    file[ope_aim]->FileWrite((DbDemo *)cache2->Gettmp_sto(),-1,true);
+                }
+            }
+        }
+        showResult();
     }
     else if(ope_aim == Borrow)
     {
@@ -184,6 +226,24 @@ void Widget::query()
         if(choose->currentIndex() == 0)
         {
 
+            DbDemoFileOperate * cache = new DbDemoFileOperate("./persons/persons.dat");
+            if(oks[Person])
+            {
+                cache->Query(aim,4,"./persons/2.dat");
+                delete cache;
+                cache = new DbDemoFileOperate("./persons/2.dat");
+            }
+            else
+            {
+                cache->Query(aim,4,"./persons/1.dat");
+                delete cache;
+                cache = new DbDemoFileOperate("./persons/1.dat");
+            }
+            if(cache->GetCount() == 0)
+            {
+                QMessageBox::warning(this,"查询失败","没有该学生");
+                return;
+            }
         }
     }
 }
