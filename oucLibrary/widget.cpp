@@ -12,8 +12,8 @@ Widget::Widget(QWidget *parent) :
     QWidget(parent), choose(new QComboBox(this)), context(new QLineEdit(this)), start(new QPushButton(this)),
     log(new QPushButton(this)), showName(new QPushButton(this)),
     lot(new QPushButton(this)), logins(new Login()), showResults{(new TableWidget(this)),
-    new TableWidget(),new TableWidget()},
-    userWidget(new QTabWidget(this)), rootWidget(new QTabWidget(this))
+    new TableWidget(),new TableWidget()}, userWidget(new QTabWidget(this)),
+    rootWidget(new QTabWidget(this)), checkbox(new QCheckBox("根据当前结果查询", this))
 {
     setMaximumSize(700,500);
     setMinimumSize(700,500);
@@ -43,14 +43,14 @@ Widget::Widget(QWidget *parent) :
     lot->setText("注销");
     lot->hide();
 
+    checkbox->setGeometry(400, 470, 200, 30);
+
     connect(logins, SIGNAL(login_success(QString,QString,int,Identify)), this, SLOT(login_success(QString,QString,int,Identify)));
     connect(lot, SIGNAL(clicked(bool)), this, SLOT(logout()));
     connect(userWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
     connect(rootWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
     initResult(0);
     chooseChange();
-
-    login_success("1","1",1,Root);
 }
 
 void Widget::createShowResult()
@@ -113,10 +113,19 @@ void Widget::initResult(int index)
         file[index] = new DbDemoFileOperate((char *)"./persons/persons.dat");
     if(index == 1 && id == User)
     {
-        file[index]->Query((char *)(&num),2,oks[index]);
-        delete file[index];
-        oks[index] = false;
-        file[index] = new DbDemoFileOperate((char *)"./borrows/1.dat");
+        if(oks[index])
+        {
+            file[index]->Query((char *)(&num),2,(char *)"./books/1.dat");
+            delete file[index];
+            file[index] = new DbDemoFileOperate((char *)"./borrows/1.dat");
+        }
+        else
+        {
+            file[index]->Query((char *)(&num),2,(char *)"./books/2.dat");
+            delete file[index];
+            file[index] = new DbDemoFileOperate((char *)"./borrows/2.dat");
+        }
+        oks[index] = !oks[index];
     }
     showResults[index]->page->setMaxPage(file[index]->GetCount()/20+(file[index]->GetCount()%20!=0));
     connect(showResults[index]->page,SIGNAL(currentPageChanged(int)),this,SLOT(showResult(int)));
@@ -124,23 +133,38 @@ void Widget::initResult(int index)
 
 void Widget::query()
 {
-    delete file[ope_aim];
+    if(!checkbox->checkState())
+    {
+        oks[ope_aim] = true;
+        delete file[ope_aim];
+        if(ope_aim == Book)
+        {
+            file[ope_aim] = new DbDemoFileOperate((char *)"./books/books.dat");
+        }
+        else if(ope_aim == Borrow)
+            file[ope_aim] = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
+        else
+            file[ope_aim] = new DbDemoFileOperate((char *)"./persons/persons.dat");
+    }
     if(ope_aim == Book)
     {
-        file[ope_aim] = new DbDemoFileOperate((char *)"./books/books.dat");
-    }
-    else if(ope_aim == Borrow)
-        file[ope_aim] = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
-    else
-        file[ope_aim] = new DbDemoFileOperate((char *)"./persons/persons.dat");
-    file[ope_aim]->Query((char *)"c++", 3, false);
-    delete result[ope_aim];
-    result[ope_aim] = new DbDemoFileOperate((char *)"1.dat");
-    if(id == Empty)
-    {
-        showResults[0]->show();
-        showResults[0]->page->setMaxPage(result[ope_aim]->GetPageCount(15));
-        connect(showResults[0]->page, SIGNAL(currentPageChanged(int)), this, SLOT(showResult(int)));
+        if(choose->currentIndex() == 0)
+        {
+            char aim[50];
+            string author = context->text().toStdString();
+            for(int i=0; i<50; i++)
+            {
+                if(i < author.length())
+                    aim[i] = author[i];
+                else aim[i] = '\0';
+            }
+            file[ope_aim]->Query(aim, 5, oks[ope_aim]);
+            if(oks[ope_aim])
+                file[ope_aim] = new DbDemoFileOperate((char *)"./books/1.dat");
+            else file[ope_aim] = new DbDemoFileOperate((char *)"./books/1.dat");
+            oks[ope_aim] = !oks[ope_aim];
+            initResult(ope_aim);
+        }
     }
 }
 

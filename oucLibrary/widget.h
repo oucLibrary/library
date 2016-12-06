@@ -10,6 +10,7 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QTabWidget>
+#include <QCheckBox>
 
 enum Ope_aim {
     Book, Borrow, Person
@@ -50,6 +51,7 @@ private:
     vector<int> show_id[3];          //对应显示内容的id
     QTabWidget * userWidget;         //显示用户界面
     QTabWidget * rootWidget;         //显示管理员界面
+    QCheckBox * checkbox;
 
     QString username;
     QString password;
