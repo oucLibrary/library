@@ -20,7 +20,7 @@ class DbDemoFileOperate{//column and raw are all started from 0
 public:
     DbDemoFileOperate();  //无特定意义
     DbDemoFileOperate(char *fileName); //实例化一类，打开一个文件名为fileName 的文件
-    void FileWrite(DbDemo *demo, int pos = -1,bool ok=false);    //文件写入 moren no cache file and after the file
+    void FileWrite(char *demo, int pos = -1,bool ok=false);    //文件写入 moren no cache file and after the file
     void Query(char *aim,int column,char *road);  //通过id查询,bool变量表示是否二次搜索,从第一列开始
     char* PrintFile (int pageNum, int printNum);//显示数据 bool表示是否是缓存文件中的,int表示取出的条数
     int GetPageCount(int printNum);//输出页码总数，int变量为每页显示的数据条数,bool代表操作是否为缓存文件；
@@ -30,10 +30,14 @@ public:
     char *Gettmp_sto();
     bool Changebyid(int tid, char *tmp);//修改id为tid的记录，整条记录重写tmp地址的内容,成功返回true，否则返回false
     bool Deletbyid(int tid);  //删除id为tid的记录，整条记录重写,成功返回true，否则返回false
+    int Getfile_num();        //返回该文件一共有多少条记录
+    void Setfile_num(int tid);       //重设文件记录的条数，涉及文件操作
+    void SetcurrId(int tid);         //重设当前Id自增，涉及文件操作
 private:
     fstream file;
     char * aim;
     char *tmp_sto;          //存储按照id查询结果的一条记录的缓存
+    int file_num;           //记录的条数
     int currId;             //当前id
     int colnum;             //列数
     int count;              //记录条数

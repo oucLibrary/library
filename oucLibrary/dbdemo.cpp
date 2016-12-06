@@ -33,6 +33,7 @@ DbDemoFileOperate::DbDemoFileOperate(char *fileName)
         exit(0);
     }
     file.seekg(0, ios::beg);
+    file.read((char*)(&file_num),sizeof(int));
     file.read((char *)(&currId), sizeof(int));
     file.read((char *)(&colnum), sizeof(int));
     for(int i=0; i<=colnum; i++)
@@ -44,7 +45,21 @@ DbDemoFileOperate::DbDemoFileOperate(char *fileName)
     aim = new char[col[colnum]*100];
     tmp_sto=NULL;
 }
-void DbDemoFileOperate::FileWrite(DbDemo *demo,int pos,bool ok)      //写入第pos条文件,默认写入文件末尾
+void DbDemoFileOperate::SetcurrId(int tid){
+    currId=tid;
+    file.seekp(sizeof(int),ios::beg);
+    file.write((char*)(&tid),sizeof(int));
+}
+void DbDemoFileOperate::Setfile_num(int tnum){
+    file_num=tnum;
+    file.seekp(0,ios::beg);
+    file.write((char*)(&tnum),sizeof(int));
+}
+int DbDemoFileOperate::Getfile_num(){
+    return file_num;
+}
+
+void DbDemoFileOperate::FileWrite(char *demo,int pos,bool ok=false)      //写入第pos条文件,默认写入文件末尾
 {
     //if(pos == -1)
       //  file.seekp(0, ios::end);
@@ -53,18 +68,22 @@ void DbDemoFileOperate::FileWrite(DbDemo *demo,int pos,bool ok)      //写入第
     //file.write((char *)(demo),fileLen);
     char *aim=(char *)demo;
     if(pos==-1){
-        file.seekp(0,ios::end);
+        file.seekp(sizeof(int)*(colnum+4)+file_num*col[colnum],ios::beg);
         file.write(aim,col[colnum]);
         file.seekp(-col[colnum],ios::end);
         if(!ok){
             file.write((char *)(&currId),sizeof(int));
+            /*
             currId++;
             file.seekp(0,ios::beg);
             file.write((char *)(&currId),sizeof(int));
+            */
+            SetcurrId(currId+1);
         }
+        Setfile_num(file_num+1);
     }
     else{
-        file.seekp(sizeof(int)*(colnum+3)+pos*col[colnum],ios::beg);
+        file.seekp(sizeof(int)*(colnum+4)+pos*col[colnum],ios::beg);
         file.write(aim,col[colnum]);
     }
 }
@@ -76,7 +95,9 @@ void DbDemoFileOperate::Query(char *aim, int column, char *road)
         cache.open("./1.dat", ios::out|ios::binary);
     else cache.open("./2.dat", ios::out|ios::binary);
     */
+    int nnum=0;
     cache.open(road,ios::out|ios::binary);
+    cache.write((char*)(&nnum),sizeof(int));
     cache.write((char *)(&currId), sizeof(int));
     cache.write((char *)(&colnum), sizeof(int));
     for(int i=0; i<=colnum; i++)
@@ -85,10 +106,12 @@ void DbDemoFileOperate::Query(char *aim, int column, char *road)
         cache.write((char *)(&pos), sizeof(int));
     }
 
-    file.seekg(col[column-1]+sizeof(int)*(colnum+3), ios::beg);
+    file.seekg(col[column-1]+sizeof(int)*(colnum+4), ios::beg);
     char infor[col[colnum]];
-    while(file.read(infor, col[column]-col[column-1]))
+    int i=0;
+    while(i<file_num&&file.read(infor, col[column]-col[column-1]))
     {
+        i++;
         for(int i=0; i<col[column]-col[column-1]; i++)
         {
             if(infor[i] != aim[i])
@@ -102,21 +125,22 @@ void DbDemoFileOperate::Query(char *aim, int column, char *road)
                 file.read(infor, col[colnum]);
                 cache.write(infor, col[colnum]);
                 file.seekg(col[column-1],ios::cur);
+                nnum++;
             }
         }
     }
+    cache.seekp(0,ios::beg);
+    cache.write((char*)(&nnum),sizeof(int));
 }
 char* DbDemoFileOperate::PrintFile(int pageNum, int printNum)
 {
-    file.seekg(sizeof(int)*(colnum+3)+col[colnum]*printNum*(pageNum-1),ios::beg);
+    file.seekg(sizeof(int)*(colnum+4)+col[colnum]*printNum*(pageNum-1),ios::beg);
     file.read(aim,col[colnum]*printNum);
     return aim;
 }
 int DbDemoFileOperate::GetCount()
 {
-    file.seekp(0,ios::end);
-    int num=file.tellp();
-    return (num-(sizeof(int))*(colnum+3))/col[colnum];
+    return Getfile_num();
 }
 
 int DbDemoFileOperate::GetPageCount(int per_page_num)
@@ -139,9 +163,9 @@ void make_order(int st,int ed,fstream &file,int column,vector<int>&col){
         int sta=st,eda=mid,stb=mid+1,edb=ed;
         fstream order_tmp("3.dat",ios::in|ios::out);
         while(sta!=eda&&stb!=edb){
-            file.seekg((siz+3)*sizeof(int)+col[siz]*sta,ios::beg);
+            file.seekg((siz+4)*sizeof(int)+col[siz]*sta,ios::beg);
             file.read(cache1,col[siz]);
-            file.seekg((siz+3)*sizeof(int)+col[siz]*stb,ios::beg);
+            file.seekg((siz+4)*sizeof(int)+col[siz]*stb,ios::beg);
             file.read(cache2,col[siz]);
             bool ok=1;
             for(int i=col[column];i<col[column+1];i++){
@@ -162,18 +186,18 @@ void make_order(int st,int ed,fstream &file,int column,vector<int>&col){
             }
         }
         while(sta<=eda){
-            file.seekg((siz+3)*sizeof(int)+col[siz]*sta,ios::beg);
+            file.seekg((siz+4)*sizeof(int)+col[siz]*sta,ios::beg);
             file.read(cache1,col[siz]);
             order_tmp.write(cache1,col[siz]);
             sta++;
         }
         while(stb<=edb){
-            file.seekg((siz+3)*sizeof(int)+col[siz]*stb,ios::beg);
+            file.seekg((siz+4)*sizeof(int)+col[siz]*stb,ios::beg);
             file.read(cache2,col[siz]);
             order_tmp.write(cache2,col[siz]);
             stb++;
         }
-        file.seekp((siz+3)*sizeof(int)+col[siz]*st,ios::beg);
+        file.seekp((siz+4)*sizeof(int)+col[siz]*st,ios::beg);
         order_tmp.seekg(0,ios::beg);
         for(int i=st;i<=ed;i++){
             order_tmp.read(cache1,col[siz]);
@@ -187,9 +211,11 @@ bool DbDemoFileOperate::Getbyid(int tid){
         delete tmp_sto;
         tmp_sto=NULL;
     }
-    file.seekg(sizeof(int)*(colnum+3),ios::beg);
+    file.seekg(sizeof(int)*(colnum+4),ios::beg);
     char tmp[col[colnum]+10];
-    while(file.read(tmp,col[colnum])){
+    int i=0;
+    while(i<file_num&&file.read(tmp,col[colnum])){
+        i++;
         int cur_id=*((int *)tmp);
         if(cur_id==tid){
             tmp_sto=new char[col[colnum]+10];
@@ -209,12 +235,33 @@ void DbDemoFileOperate::Order(int column)
 }
 
 bool DbDemoFileOperate::Changebyid(int tid,char *tmp){
-    file.seekg(sizeof(int)*(colnum+3),ios::beg);
+    file.seekg(sizeof(int)*(colnum+4),ios::beg);
     char *buff=new char[col[colnum]+10];
-    while(file.read(buff,col[colnum])){
+    int i=0;
+    while(i<file_num&&file.read(buff,col[colnum])){
+        i++;
         if(*((int*)buff)==tid){
             file.seekp(((int)file.tellg())-col[colnum],ios::beg);
             file.write(tmp,col[colnum]);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool DbDemoFileOperate::Deletbyid(int tid){
+    char *buff=new char[col[colnum]+10];
+    int i=0;
+    char *tar=new char[col[colnum]+10];
+    file.seekg(sizeof(int)*(colnum+4)+(file_num-1)*col[colnum],ios::beg);
+    file.read(tar,col[colnum]);
+    file.seekg(sizeof(int)*(colnum+4),ios::beg);
+    while(i<file_num&&file.read(buff,col[colnum])){
+        i++;
+        if((*(int*)buff)==tid){
+            file.seekp(((int)file.tellg())-col[colnum],ios::beg);
+            file.write(tar,col[colnum]);
+            Setfile_num(file_num-1);
             return true;
         }
     }
