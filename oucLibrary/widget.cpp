@@ -49,6 +49,8 @@ Widget::Widget(QWidget *parent) :
     connect(rootWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
     initResult(0);
     chooseChange();
+
+    login_success("1","1",1,Root);
 }
 
 void Widget::createShowResult()
@@ -193,6 +195,7 @@ void Widget::showResult(int page)
     show_id[index].clear();
     for(int i=0;i<min(20, file[index]->GetCount()-20*(page-1));i++)
     {
+        showResults[index]->table->setRowCount(i+1);
         if(index == 0)
         {
             Books * book = new Books(file[index]->PrintFile(i+1+20*(page-1),1));
@@ -259,7 +262,6 @@ void Widget::showResult(int page)
 
 void Widget::chooseChange(int index)
 {
-    showResult();
     choose->clear();
     if(index == 0)
     {
@@ -284,6 +286,7 @@ void Widget::chooseChange(int index)
         choose->addItem("姓名");
         choose->addItem("帐号");
     }
+    showResult();
 }
 
 void Widget::paintEvent(QPaintEvent *event)
