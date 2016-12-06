@@ -47,8 +47,8 @@ Widget::Widget(QWidget *parent) :
     connect(lot, SIGNAL(clicked(bool)), this, SLOT(logout()));
     connect(userWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
     connect(rootWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
-    chooseChange();
     initResult(0);
+    chooseChange();
 }
 
 void Widget::createShowResult()
@@ -216,7 +216,7 @@ void Widget::showResult(int page)
                 mess->exec();
                 exit(0);
             }
-            Bookcopy * bookcopy = new Bookcopy(cache->tmp_sto);
+            Bookcopy * bookcopy = new Bookcopy(cache->Gettmp_sto());
             delete cache;
             cache = new DbDemoFileOperate((char *)"./books/books.dat");
             if(!cache->Getbyid(bookcopy->Getbookid()))
@@ -226,7 +226,7 @@ void Widget::showResult(int page)
                 mess->exec();
                 exit(0);
             }
-            Books * book = new Books(cache->tmp_sto);
+            Books * book = new Books(cache->Gettmp_sto());
             showResults[index]->table->setItem(i,2,new QTableWidgetItem(QString::fromStdString(book->Getname())));
             showResults[index]->table->setItem(i,3,new QTableWidgetItem(QString::fromStdString(book->Getisbn())));
             delete cache;
@@ -238,7 +238,7 @@ void Widget::showResult(int page)
                 mess->exec();
                 exit(0);
             }
-            Persons * person = new Persons(cache->tmp_sto);
+            Persons * person = new Persons(cache->Gettmp_sto());
             showResults[index]->table->setItem(i,0,new QTableWidgetItem(QString::fromStdString(person->Getname())));
             showResults[index]->table->setItem(i,1,new QTableWidgetItem(QString::fromStdString(person->Getaccount())));
         }

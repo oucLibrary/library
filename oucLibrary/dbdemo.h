@@ -27,10 +27,11 @@ public:
     int GetCount();//输出数据总条数，bool表示操作是否为缓存文件；
     void Order(int column); //对缓存文件排序，若无缓存文件则复制原文件作为缓存文件；
     bool Getbyid(int tid);  //按照id查询，如果能查找到返回true，否则返回false。如果查找不到，tmp_sto为NULL，否则查找结果存储在tmp_sto。
-    char *tmp_sto;          //存储按照id查询结果的一条记录的缓存
+    char *Gettmp_sto();
 private:
     fstream file;
     char * aim;
+    char *tmp_sto;          //存储按照id查询结果的一条记录的缓存
     int currId;             //当前id
     int colnum;             //列数
     int count;              //记录条数
@@ -45,6 +46,7 @@ private:
     char author[20];
     char press[20];
     char isbn[20];
+    char *my_cache;
 public:
     Books(char *tmp);
     Books(int tid,QString tbookName,int tamount,int tleft, QString tauthor,QString tpress,QString tisbn);
@@ -60,6 +62,7 @@ public:
     void Setpress(QString tmp);
     char *Getisbn();
     void Setisbn(QString tmp);
+    char *Getmy_cache();
 };
 
 class Bookcopy:public DbDemo{
@@ -71,7 +74,9 @@ public:
     void Setlend(int tmp);
     int Getbookid();
     int Getlend();
+    char *Getmy_cache();
 private:
+    char *my_cache;
     int bookid;
     int lend;
 };
@@ -82,8 +87,10 @@ public:
     BookKinds(int tid,QString tkindName);
     void SetkindName(QString tmp);
     char *GetkindName();
+    char *Getmy_cache();
 private:
-    char kindName[50];
+    char kindName[20];
+    char *my_cache;
 };
 
 class Classification:public DbDemo{
@@ -92,11 +99,13 @@ private:
     Classification(char *tmp);
     int bookid;
     int kindid;
+    char *my_cache;
 public:
     int Getbookid();
     void Setbookid(int tmp);
     int Getkindid();
     void Setkindid(int tmp);
+    char *Getmy_cache();
 };
 
 class Persons:public DbDemo{
@@ -109,6 +118,7 @@ private:
     char phone[15];//
     int age;
     QDate birth;
+    char *my_cache;
 public:
     void Setname(QString tmp);
     char *Getname();
@@ -128,6 +138,7 @@ public:
     void Setage(int tmp);
     QDate Getbirth();
     void Setbirth(QDate tmp);
+    char *Getmy_cache();
 };
 
 class Borrows:public DbDemo{
@@ -138,6 +149,7 @@ private:
     int ifLend;
     QDate lastTime;
     int ifReturn;
+    char *my_cache;
 public:
     Borrows(char *);
     Borrows(int tid,int tstudentId,int tbookId,QDate tfirstTime,int tifLend,QDate lastTime,int tifReturn);
@@ -153,12 +165,14 @@ public:
     void SetlastTime(QDate tmp);
     int GetifReturn();
     void SetifReturn(int tmp);
+    char *Getmy_cache();
 };
 
 class Admins:public DbDemo{
 private:
     char account[20];
     char password[20];
+    char *my_cache;
 public:
     Admins(int tid, QString taccount,QString tpassword);
     Admins(char *tmp);
@@ -166,6 +180,7 @@ public:
     void Setaccount(QString tmp);
     char *Getpassword();
     void Setpassword(QString tmp);
+    char *Getmy_cache();
 };
 
 #endif // DBDEMO_H
