@@ -115,19 +115,18 @@ void Widget::initResult(int index)
     {
         if(oks[index])
         {
-            file[index]->Query((char *)(&num),2,(char *)"./books/1.dat");
+            file[index]->Query((char *)(&num),2,(char *)"./borrows/1.dat");
             delete file[index];
             file[index] = new DbDemoFileOperate((char *)"./borrows/1.dat");
         }
         else
         {
-            file[index]->Query((char *)(&num),2,(char *)"./books/2.dat");
+            file[index]->Query((char *)(&num),2,(char *)"./borrows/2.dat");
             delete file[index];
             file[index] = new DbDemoFileOperate((char *)"./borrows/2.dat");
         }
         oks[index] = !oks[index];
     }
-    showResults[index]->page->setMaxPage(file[index]->GetCount()/20+(file[index]->GetCount()%20!=0));
     connect(showResults[index]->page,SIGNAL(currentPageChanged(int)),this,SLOT(showResult(int)));
 }
 
@@ -146,24 +145,45 @@ void Widget::query()
         else
             file[ope_aim] = new DbDemoFileOperate((char *)"./persons/persons.dat");
     }
+    char aim[50];
+    string author = context->text().toStdString();
+    for(int i=0; i<50; i++)
+    {
+        if(i < (int)author.length())
+            aim[i] = author[i];
+        else aim[i] = '\0';
+    }
+    int queryline;
     if(ope_aim == Book)
     {
+        if(choose->currentIndex() == 0 || choose->currentIndex() == 1)
+        {
+            if(choose->currentIndex() == 0)
+                queryline = 5;
+            else queryline = 2;
+            if(oks[ope_aim])
+            {
+                file[ope_aim]->Query(aim, queryline, (char *)"./books/1.dat");
+                delete file[ope_aim];
+                file[ope_aim] = new DbDemoFileOperate((char *)"./books/1.dat");
+            }
+            else
+            {
+                file[ope_aim]->Query(aim, queryline, (char *)"./books/2.dat");
+                delete file[ope_aim];
+                file[ope_aim] = new DbDemoFileOperate((char *)"./books/2.dat");
+            }
+            oks[ope_aim] = !oks[ope_aim];
+            showResult();
+        }
+    }
+    else if(ope_aim == Borrow)
+    {
+        if(id == User)
+            return;
         if(choose->currentIndex() == 0)
         {
-            char aim[50];
-            string author = context->text().toStdString();
-            for(int i=0; i<50; i++)
-            {
-                if(i < author.length())
-                    aim[i] = author[i];
-                else aim[i] = '\0';
-            }
-            file[ope_aim]->Query(aim, 5, oks[ope_aim]);
-            if(oks[ope_aim])
-                file[ope_aim] = new DbDemoFileOperate((char *)"./books/1.dat");
-            else file[ope_aim] = new DbDemoFileOperate((char *)"./books/1.dat");
-            oks[ope_aim] = !oks[ope_aim];
-            initResult(ope_aim);
+
         }
     }
 }
@@ -216,7 +236,10 @@ void Widget::logout()
 void Widget::showResult(int page)
 {
     Ope_aim index = ope_aim;
+    showResults[index]->page->setMaxPage(file[index]->GetCount()/20+(file[index]->GetCount()%20!=0));
+    showResults[index]->page->setCurrentPage(page);
     show_id[index].clear();
+    showResults[index]->table->setRowCount(0);
     for(int i=0;i<min(20, file[index]->GetCount()-20*(page-1));i++)
     {
         showResults[index]->table->setRowCount(i+1);
