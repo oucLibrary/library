@@ -42,6 +42,7 @@ DbDemoFileOperate::DbDemoFileOperate(char *fileName)
         col.push_back(pos);
     }
     aim = new char[col[colnum]*100];
+    tmp_sto=NULL;
 }
 void DbDemoFileOperate::FileWrite(DbDemo *demo,int pos,bool ok)      //写入第pos条文件,默认写入文件末尾
 {
@@ -179,7 +180,10 @@ void make_order(int st,int ed,fstream &file,int column,vector<int>&col){
 }
 
 bool DbDemoFileOperate::Getbyid(int tid){
-    delete tmp_sto;
+    if(tmp_sto!=NULL){
+        delete tmp_sto;
+        tmp_sto=NULL;
+    }
     file.seekg(sizeof(int)*(colnum+3),ios::beg);
     char tmp[col[colnum]+10];
     while(file.read(tmp,col[colnum])){

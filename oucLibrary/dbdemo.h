@@ -28,6 +28,8 @@ public:
     void Order(int column); //对缓存文件排序，若无缓存文件则复制原文件作为缓存文件；
     bool Getbyid(int tid);  //按照id查询，如果能查找到返回true，否则返回false。如果查找不到，tmp_sto为NULL，否则查找结果存储在tmp_sto。
     char *Gettmp_sto();
+    bool Changebyid(int tid);//修改id为tid的记录，整条记录重写,成功返回true，否则返回false
+    bool Deletbyid(int tid);  //删除id为tid的记录，整条记录重写,成功返回true，否则返回false
 private:
     fstream file;
     char * aim;
