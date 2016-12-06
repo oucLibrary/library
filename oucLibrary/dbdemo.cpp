@@ -68,12 +68,15 @@ void DbDemoFileOperate::FileWrite(DbDemo *demo,int pos,bool ok)      //写入第
         file.write(aim,col[colnum]);
     }
 }
-void DbDemoFileOperate::Query(char *aim, int column, bool ok)
+void DbDemoFileOperate::Query(char *aim, int column, char *road)
 {
     fstream cache;
+    /*
     if(ok)
-        cache.open("1.dat", ios::out|ios::binary);
-    else cache.open("2.dat", ios::out|ios::binary);
+        cache.open("./1.dat", ios::out|ios::binary);
+    else cache.open("./2.dat", ios::out|ios::binary);
+    */
+    cache.open(road,ios::out|ios::binary);
     cache.write((char *)(&currId), sizeof(int));
     cache.write((char *)(&colnum), sizeof(int));
     for(int i=0; i<=colnum; i++)
