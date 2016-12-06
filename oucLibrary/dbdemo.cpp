@@ -204,6 +204,20 @@ void DbDemoFileOperate::Order(int column)
     int len=GetCount();
     make_order(0,len-1,file,column,col);
 }
+
+bool DbDemoFileOperate::Changebyid(int tid,char *tmp){
+    file.seekg(sizeof(int)*(colnum+3),ios::beg);
+    char *buff=new char[col[colnum]+10];
+    while(file.read(buff,col[colnum])){
+        if(*((int*)buff)==tid){
+            file.seekp(((int)file.tellg())-col[colnum],ios::beg);
+            file.write(tmp,col[colnum]);
+            return true;
+        }
+    }
+    return false;
+}
+
 Books::Books(int tid, QString tname, int tamount, int tleft, QString tauthor, QString tpress, QString tisbn):DbDemo(tid){
     Setname(tname);
     Setamount(tamount);
