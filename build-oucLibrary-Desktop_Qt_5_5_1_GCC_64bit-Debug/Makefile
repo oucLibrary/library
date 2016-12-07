@@ -716,6 +716,8 @@ moc_widget.cpp: ../oucLibrary/dbdemo.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QComboBox \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qcombobox.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QTabWidget \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QCheckBox \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qcheckbox.h \
 		../oucLibrary/widget.h
 	/opt/Qt5.5.1/5.5/gcc_64/bin/moc $(DEFINES) -I/opt/Qt5.5.1/5.5/gcc_64/mkspecs/linux-g++ -I/home/liutun/代码/qt/oucLibrary/oucLibrary -I/opt/Qt5.5.1/5.5/gcc_64/include -I/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets -I/opt/Qt5.5.1/5.5/gcc_64/include/QtGui -I/opt/Qt5.5.1/5.5/gcc_64/include/QtCore -I. ../oucLibrary/widget.h -o moc_widget.cpp
 
@@ -1460,6 +1462,8 @@ main.o: ../oucLibrary/main.cpp ../oucLibrary/widget.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QComboBox \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qcombobox.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QTabWidget \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QCheckBox \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qcheckbox.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QApplication \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qapplication.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qcoreapplication.h \
@@ -1614,6 +1618,8 @@ widget.o: ../oucLibrary/widget.cpp ../oucLibrary/widget.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QComboBox \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qcombobox.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QTabWidget \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QCheckBox \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qcheckbox.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/QPainter \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qpainter.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/QFont \

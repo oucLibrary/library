@@ -6,7 +6,7 @@
 #include <QDebug>
 
 Login::Login(QWidget * parent) : QWidget(parent), showname(new QLabel(this)), showpass(new QLabel(this)),
-    username(new QLineEdit(this)), password(new QLineEdit(this)), log(new QPushButton(this)), reg(new QPushButton(this)),
+    username(new QLineEdit("pgfxwkcaucb",this)), password(new QLineEdit("813072",this)), log(new QPushButton(this)), reg(new QPushButton(this)),
     regist(new Register())
 {
     setWindowModality(Qt::ApplicationModal);
@@ -42,7 +42,7 @@ void Login::check()
     //判断登录是否成功以及是什么身份登录的
     Identify id = Root;
     int num;
-    DbDemoFileOperate * file = new DbDemoFileOperate("./admins/admins.dat");
+    DbDemoFileOperate * file = new DbDemoFileOperate((char *)"./admins/admins.dat");
 
     for(int i=1; i<=file->GetCount(); i++)
     {
@@ -59,7 +59,7 @@ void Login::check()
     if(!ok)
     {
         id = User;
-        DbDemoFileOperate * file = new DbDemoFileOperate("./persons/persons.dat");
+        DbDemoFileOperate * file = new DbDemoFileOperate((char *)"./persons/persons.dat");
         for(int i=1; i<=file->GetCount(); i++)
         {
             Persons * person = (Persons *)file->PrintFile(i,1);

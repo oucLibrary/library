@@ -241,7 +241,7 @@ bool DbDemoFileOperate::Changebyid(int tid,char *tmp){
     while(i<file_num&&file.read(buff,col[colnum])){
         i++;
         if(*((int*)buff)==tid){
-            file.seekp(((int)file.tellg())-col[colnum],ios::beg);
+            file.seekp(sizeof(int)*(colnum+4)+(i-1)*col[colnum],ios::beg);
             file.write(tmp,col[colnum]);
             return true;
         }
@@ -268,6 +268,59 @@ bool DbDemoFileOperate::Deletbyid(int tid){
     return false;
 }
 
+bool DbDemoFileOperate::Getbynum(int tnum){
+    if(tnum>file_num)return false;
+    tnum--;
+    file.seekg(sizeof(int)*(4+colnum)+tnum*col[colnum],ios::beg);
+    if(tmp_sto != NULL)
+    {
+        delete tmp_sto;
+        tmp_sto = NULL;
+    }
+    tmp_sto=new char[col[colnum]+10];
+    file.read(tmp_sto,col[colnum]);
+    return true;
+}
+
+int DbDemoFileOperate::Getsiz(int col_num){
+    if(col_num>colnum||col_num<=0)return 0;
+    return col[col_num]-col[col_num-1];
+}
+int DbDemoFileOperate::Getst(int col_num){
+    if(col_num>colnum||col_num<=0)return 0;
+    return col[col_num-1];
+}
+
+bool Getmulti(DbDemoFileOperate *f1, int from, DbDemoFileOperate *f2, int tar, char *file3){
+    bool find_rel=0;
+    if(f1->Getsiz(from)!=f2->Getsiz(tar))return find_rel;
+    for(int i=1;i<=f1->Getfile_num();i++){
+        f1->Getbynum(i);
+        for(int j=1;j<=f2->Getfile_num();j++){
+            int ll=f1->Getsiz(from);
+            f2->Getbynum(j);
+            bool ook=1;
+            for(int k=0;k<ll;k++){
+                if(*(f1->Gettmp_sto()+f1->Getst(from)+k)!=*(f2->Gettmp_sto()+f2->Getst(tar)+k)){
+                    ook=0;
+                    break;
+                }
+            }
+            if(ook){
+                if(!find_rel){
+                    find_rel=1;
+                    f2->Query(f2->Gettmp_sto(),1,file3);
+                }
+                else{
+                    DbDemoFileOperate f3(file3);
+                    f3.FileWrite(f2->Gettmp_sto(),-1,1);
+                }
+            }
+        }
+    }
+    return find_rel;
+}
+
 Books::Books(int tid, QString tname, int tamount, int tleft, QString tauthor, QString tpress, QString tisbn):DbDemo(tid){
     Setname(tname);
     Setamount(tamount);
@@ -276,49 +329,6 @@ Books::Books(int tid, QString tname, int tamount, int tleft, QString tauthor, QS
     Setpress(tpress);
     Setisbn(tisbn);
     my_cache=new char[sizeof(id)+sizeof(name)+sizeof(amount)+sizeof(left)+sizeof(author)+sizeof(press)+sizeof(isbn)];
-    char *cur_c=my_cache;
-    char *tt=(char *)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(name);
-    for(int i=0;i<(int)sizeof(name);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&amount);
-    for(int i=0;i<(int)sizeof(amount);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&left);
-    for(int i=0;i<(int)sizeof(amount);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(author);
-    for(int i=0;i<(int)sizeof(author);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(press);
-    for(int i=0;i<(int)sizeof(press);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(isbn);
-    for(int i=0;i<(int)sizeof(isbn);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 Books::Books(char *tmp){
     id=*((int*)tmp);
@@ -336,7 +346,7 @@ Books::Books(char *tmp){
         tmp++;
     }
     for(int i=0;i<20;i++){
-        press[i]=*tmp;
+        press[i]=*tmp;my_cache=new char[sizeof(id)+sizeof(name)+sizeof(amount)+sizeof(left)+sizeof(author)+sizeof(press)+sizeof(isbn)];
         tmp++;
     }
     for(int i=0;i<20;i++){
@@ -344,49 +354,6 @@ Books::Books(char *tmp){
         tmp++;
     }
     my_cache=new char[sizeof(id)+sizeof(name)+sizeof(amount)+sizeof(left)+sizeof(author)+sizeof(press)+sizeof(isbn)];
-    char *cur_c=my_cache;
-    char *tt=(char *)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(name);
-    for(int i=0;i<(int)sizeof(name);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&amount);
-    for(int i=0;i<(int)sizeof(amount);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&left);
-    for(int i=0;i<(int)sizeof(amount);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(author);
-    for(int i=0;i<(int)sizeof(author);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(press);
-    for(int i=0;i<(int)sizeof(press);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(isbn);
-    for(int i=0;i<(int)sizeof(isbn);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 char *Books::Getname(){
@@ -449,6 +416,49 @@ void Books::Setpress(QString tmp){
 }
 
 char *Books::Getmy_cache(){
+    char *cur_c=my_cache;
+    char *tt=(char *)(&id);
+    for(int i=0;i<(int)sizeof(id);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char *)(name);
+    for(int i=0;i<(int)sizeof(name);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char *)(&amount);
+    for(int i=0;i<(int)sizeof(amount);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char *)(&left);
+    for(int i=0;i<(int)sizeof(amount);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char*)(author);
+    for(int i=0;i<(int)sizeof(author);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char*)(press);
+    for(int i=0;i<(int)sizeof(press);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char*)(isbn);
+    for(int i=0;i<(int)sizeof(isbn);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
     return my_cache;
 }
 
@@ -456,25 +466,6 @@ Bookcopy::Bookcopy(int tid,int tbookid,int tlend):DbDemo(tid){
     bookid=tbookid;
     lend=tlend;
     my_cache=new char[sizeof(int)*3];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&bookid);
-    for(int i=0;i<(int)sizeof(bookid);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&lend);
-    for(int i=0;i<(int)sizeof(lend);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 Bookcopy::Bookcopy(char *tmp){
@@ -484,25 +475,6 @@ Bookcopy::Bookcopy(char *tmp){
     tmp+=sizeof(int);
     lend=*((int *)tmp);
     my_cache=new char[sizeof(int)*3];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&bookid);
-    for(int i=0;i<(int)sizeof(bookid);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&lend);
-    for(int i=0;i<(int)sizeof(lend);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 void Bookcopy::Setbookid(int tmp){
@@ -522,6 +494,25 @@ int Bookcopy::Getlend(){
 }
 
 char *Bookcopy::Getmy_cache(){
+    char *cur_c=my_cache;
+    char *tt=(char*)(&id);
+    for(int i=0;i<(int)sizeof(id);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char *)(&bookid);
+    for(int i=0;i<(int)sizeof(bookid);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char *)(&lend);
+    for(int i=0;i<(int)sizeof(lend);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
     return my_cache;
 }
 
@@ -533,37 +524,11 @@ BookKinds::BookKinds(char *tmp){
         tmp++;
     }
     my_cache=new char[sizeof(id)+sizeof(kindName)];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=kindName;
-    for(int i=0;i<(int)sizeof(kindName);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 BookKinds::BookKinds(int tid,QString tkindName):DbDemo(tid){
     SetkindName(tkindName);
     my_cache=new char[sizeof(id)+sizeof(kindName)];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=kindName;
-    for(int i=0;i<(int)sizeof(kindName);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 void BookKinds::SetkindName(QString tmp){
@@ -578,13 +543,6 @@ char *BookKinds::GetkindName(){
 }
 
 char *BookKinds::Getmy_cache(){
-    return my_cache;
-}
-
-Classification::Classification(int tid,int tbookid,int tkindid):DbDemo(tid){
-    bookid=tbookid;
-    kindid=tkindid;
-    my_cache=new char[sizeof(int)*3];
     char *cur_c=my_cache;
     char *tt=(char*)(&id);
     for(int i=0;i<(int)sizeof(id);i++){
@@ -592,18 +550,19 @@ Classification::Classification(int tid,int tbookid,int tkindid):DbDemo(tid){
         cur_c++;
         tt++;
     }
-    tt=(char *)(&bookid);
-    for(int i=0;i<(int)sizeof(bookid);i++){
+    tt=kindName;
+    for(int i=0;i<(int)sizeof(kindName);i++){
         *cur_c=*tt;
         cur_c++;
         tt++;
     }
-    tt=(char *)(&kindid);
-    for(int i=0;i<(int)sizeof(kindid);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
+    return my_cache;
+}
+
+Classification::Classification(int tid,int tbookid,int tkindid):DbDemo(tid){
+    bookid=tbookid;
+    kindid=tkindid;
+    my_cache=new char[sizeof(int)*3];
 }
 
 Classification::Classification(char *tmp){
@@ -613,25 +572,6 @@ Classification::Classification(char *tmp){
     tmp+=sizeof(int);
     kindid=*((int *)tmp);
     my_cache=new char[sizeof(int)*3];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&bookid);
-    for(int i=0;i<(int)sizeof(bookid);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char *)(&kindid);
-    for(int i=0;i<(int)sizeof(kindid);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 int Classification::Getbookid(){
@@ -651,6 +591,25 @@ void Classification::Setkindid(int tmp){
 }
 
 char *Classification::Getmy_cache(){
+    char *cur_c=my_cache;
+    char *tt=(char*)(&id);
+    for(int i=0;i<(int)sizeof(id);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char *)(&bookid);
+    for(int i=0;i<(int)sizeof(bookid);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char *)(&kindid);
+    for(int i=0;i<(int)sizeof(kindid);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
     return my_cache;
 }
 
@@ -664,61 +623,6 @@ Persons::Persons(int tid,QString taccount,QString tpassword,QString tname,int ts
     Setage(tage);
     Setbirth(tbirth);
     my_cache=new char[sizeof(id)+sizeof(account)+sizeof(password)+sizeof(name)+sizeof(sex)+sizeof(email)+sizeof(phone)+sizeof(age)+sizeof(birth)];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=account;
-    for(int i=0;i<(int)sizeof(account);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=password;
-    for(int i=0;i<(int)sizeof(password);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=name;
-    for(int i=0;i<(int)sizeof(name);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&sex);
-    for(int i=0;i<(int)sizeof(sex);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=email;
-    for(int i=0;i<(int)sizeof(email);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=phone;
-    for(int i=0;i<(int)sizeof(phone);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&age);
-    for(int i=0;i<(int)sizeof(age);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&birth);
-    for(int i=0;i<(int)sizeof(birth);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 Persons::Persons(char *tmp){
     id=*((int*)tmp);
@@ -749,61 +653,6 @@ Persons::Persons(char *tmp){
     tmp+=sizeof(int);
     birth=*((QDate*)tmp);
     my_cache=new char[sizeof(id)+sizeof(account)+sizeof(password)+sizeof(name)+sizeof(sex)+sizeof(email)+sizeof(phone)+sizeof(age)+sizeof(birth)];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=account;
-    for(int i=0;i<(int)sizeof(account);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=password;
-    for(int i=0;i<(int)sizeof(password);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=name;
-    for(int i=0;i<(int)sizeof(name);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&sex);
-    for(int i=0;i<(int)sizeof(sex);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=email;
-    for(int i=0;i<(int)sizeof(email);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=phone;
-    for(int i=0;i<(int)sizeof(phone);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&age);
-    for(int i=0;i<(int)sizeof(age);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&birth);
-    for(int i=0;i<(int)sizeof(birth);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 char *Persons::Getaccount(){
@@ -882,6 +731,61 @@ void Persons::Setname(QString tmp){
 }
 
 char *Persons::Getmy_cache(){
+    char *cur_c=my_cache;
+    char *tt=(char*)(&id);
+    for(int i=0;i<(int)sizeof(id);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=account;
+    for(int i=0;i<(int)sizeof(account);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=password;
+    for(int i=0;i<(int)sizeof(password);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=name;
+    for(int i=0;i<(int)sizeof(name);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char*)(&sex);
+    for(int i=0;i<(int)sizeof(sex);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=email;
+    for(int i=0;i<(int)sizeof(email);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=phone;
+    for(int i=0;i<(int)sizeof(phone);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char*)(&age);
+    for(int i=0;i<(int)sizeof(age);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char*)(&birth);
+    for(int i=0;i<(int)sizeof(birth);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
     return my_cache;
 }
 
@@ -901,49 +805,6 @@ Borrows::Borrows(char *tmp){
     ifReturn=*((int *)tmp);
     tmp+=sizeof(int);
     my_cache=new char[sizeof(id)+sizeof(studentId)+sizeof(bookId)+sizeof(firstTime)+sizeof(ifLend)+sizeof(lastTime)+sizeof(lastTime)+sizeof(ifReturn)];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&studentId);
-    for(int i=0;i<(int)sizeof(studentId);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&bookId);
-    for(int i=0;i<(int)sizeof(bookId);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&firstTime);
-    for(int i=0;i<(int)sizeof(firstTime);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&ifLend);
-    for(int i=0;i<(int)sizeof(ifLend);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&lastTime);
-    for(int i=0;i<(int)sizeof(lastTime);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&ifReturn);
-    for(int i=0;i<(int)sizeof(ifReturn);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 Borrows::Borrows(int tid,int tstudentId,int tbookId,QDate tfirstTime,int tifLend,QDate tlastTime,int tifReturn):DbDemo(tid){
@@ -954,49 +815,6 @@ Borrows::Borrows(int tid,int tstudentId,int tbookId,QDate tfirstTime,int tifLend
     SetlastTime(tlastTime);
     SetifReturn(tifReturn);
     my_cache=new char[sizeof(id)+sizeof(studentId)+sizeof(bookId)+sizeof(firstTime)+sizeof(ifLend)+sizeof(lastTime)+sizeof(lastTime)+sizeof(ifReturn)];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&studentId);
-    for(int i=0;i<(int)sizeof(studentId);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&bookId);
-    for(int i=0;i<(int)sizeof(bookId);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&firstTime);
-    for(int i=0;i<(int)sizeof(firstTime);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&ifLend);
-    for(int i=0;i<(int)sizeof(ifLend);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&lastTime);
-    for(int i=0;i<(int)sizeof(lastTime);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=(char*)(&ifReturn);
-    for(int i=0;i<(int)sizeof(ifReturn);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 int Borrows::GetstudentId(){
@@ -1049,13 +867,6 @@ void Borrows::SetifReturn(int tmp){
 }
 
 char *Borrows::Getmy_cache(){
-    return my_cache;
-}
-
-Admins::Admins(int tid, QString taccount,QString tpassword):DbDemo(tid){
-    Setaccount(taccount);
-    Setpassword(tpassword);
-    my_cache=new char[sizeof(int)+sizeof(account)+sizeof(password)];
     char *cur_c=my_cache;
     char *tt=(char*)(&id);
     for(int i=0;i<(int)sizeof(id);i++){
@@ -1063,18 +874,49 @@ Admins::Admins(int tid, QString taccount,QString tpassword):DbDemo(tid){
         cur_c++;
         tt++;
     }
-    tt=account;
-    for(int i=0;i<(int)sizeof(account);i++){
+    tt=(char*)(&studentId);
+    for(int i=0;i<(int)sizeof(studentId);i++){
         *cur_c=*tt;
         cur_c++;
         tt++;
     }
-    tt=password;
-    for(int i=0;i<(int)sizeof(password);i++){
+    tt=(char*)(&bookId);
+    for(int i=0;i<(int)sizeof(bookId);i++){
         *cur_c=*tt;
         cur_c++;
         tt++;
     }
+    tt=(char*)(&firstTime);
+    for(int i=0;i<(int)sizeof(firstTime);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char*)(&ifLend);
+    for(int i=0;i<(int)sizeof(ifLend);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char*)(&lastTime);
+    for(int i=0;i<(int)sizeof(lastTime);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=(char*)(&ifReturn);
+    for(int i=0;i<(int)sizeof(ifReturn);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    return my_cache;
+}
+
+Admins::Admins(int tid, QString taccount,QString tpassword):DbDemo(tid){
+    Setaccount(taccount);
+    Setpassword(tpassword);
+    my_cache=new char[sizeof(int)+sizeof(account)+sizeof(password)];
 }
 
 Admins::Admins(char *tmp){
@@ -1089,25 +931,6 @@ Admins::Admins(char *tmp){
         tmp++;
     }
     my_cache=new char[sizeof(int)+sizeof(account)+sizeof(password)];
-    char *cur_c=my_cache;
-    char *tt=(char*)(&id);
-    for(int i=0;i<(int)sizeof(id);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=account;
-    for(int i=0;i<(int)sizeof(account);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
-    tt=password;
-    for(int i=0;i<(int)sizeof(password);i++){
-        *cur_c=*tt;
-        cur_c++;
-        tt++;
-    }
 }
 
 char *Admins::Getaccount(){
@@ -1133,5 +956,24 @@ void Admins::Setpassword(QString tmp){
 }
 
 char *Admins::Getmy_cache(){
+    char *cur_c=my_cache;
+    char *tt=(char*)(&id);
+    for(int i=0;i<(int)sizeof(id);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=account;
+    for(int i=0;i<(int)sizeof(account);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
+    tt=password;
+    for(int i=0;i<(int)sizeof(password);i++){
+        *cur_c=*tt;
+        cur_c++;
+        tt++;
+    }
     return my_cache;
 }

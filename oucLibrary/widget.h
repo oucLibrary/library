@@ -25,18 +25,19 @@ public:
     void createShowResult();
     void createUserWidget();
     void createRootWidget();
-    void initResult(int index);
     ~Widget();
 
 protected:
     void paintEvent(QPaintEvent * event);
 
 protected slots:
+    void initResult(int index = -1);
     void query();
     void login_success(QString username, QString password, int num, Identify id);
     void logout();
     void showResult(int page = 1);
     void chooseChange(int index = 0);
+    void returnBook();
 
 private:
     QComboBox * choose;        //选择查询目标
@@ -51,7 +52,14 @@ private:
     vector<int> show_id[3];          //对应显示内容的id
     QTabWidget * userWidget;         //显示用户界面
     QTabWidget * rootWidget;         //显示管理员界面
-    QCheckBox * checkbox;
+    QCheckBox * checkbox;            //是否从当前目录查询
+    QPushButton * resetButton;         //重置按钮
+    QPushButton * addCurrBook;       //增加当前书
+    QPushButton * addNewBook;        //增加新书
+    QPushButton * delBook;           //删除书
+    QPushButton * retBook;           //还书
+    QPushButton * losBook;           //丢失书
+    QPushButton * delPerson;         //删除用户
 
     QString username;
     QString password;

@@ -31,9 +31,12 @@ public:
     bool Changebyid(int tid, char *tmp);//修改id为tid的记录，整条记录重写tmp地址的内容,成功返回true，否则返回false
     bool Deletbyid(int tid);  //删除id为tid的记录，整条记录重写,成功返回true，否则返回false
     int Getfile_num();        //返回该文件一共有多少条记录
+    bool Getbynum(int tnum);         //返回文件的第tnum条记录，如果tnum大于文件记录数返回false
+    int Getsiz(int col_num);         //返回记录第col_num列的大小，如果col_num大于文件列数返回0
+    int Getst(int col_num);          //返回第col_num的起始相对地址，如果col_num大于文件列数返回-1
+private:
     void Setfile_num(int tid);       //重设文件记录的条数，涉及文件操作
     void SetcurrId(int tid);         //重设当前Id自增，涉及文件操作
-private:
     fstream file;
     char * aim;
     char *tmp_sto;          //存储按照id查询结果的一条记录的缓存
@@ -43,6 +46,8 @@ private:
     int count;              //记录条数
     vector<int>col;         //每一列的起始位置
 };
+
+bool Getmulti(DbDemoFileOperate * f1,int from,DbDemoFileOperate *f2,int tar,char *file3);
 
 class Books:public DbDemo{
 private:
@@ -84,7 +89,7 @@ public:
 private:
     char *my_cache;
     int bookid;
-    int lend;
+    int lend;//1-被借了
 };
 
 class BookKinds:public DbDemo{
