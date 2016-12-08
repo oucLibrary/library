@@ -4,6 +4,7 @@
 #include "dbdemo.h"
 #include "login.h"
 #include "tablewidget.h"
+#include "dialog.h"
 
 #include <QWidget>
 #include <QPushButton>
@@ -22,6 +23,7 @@ class Widget : public QWidget
 
 public:
     explicit Widget(QWidget *parent = 0);
+    void createDialog();
     void createShowResult();
     void createUserWidget();
     void createRootWidget();
@@ -38,6 +40,9 @@ protected slots:
     void showResult(int page = 1);
     void chooseChange(int index = 0);
     void returnBook();
+    void deleteUser();
+    void addUsers(QList<QString> list);
+    void addBorrow(QList<QString> list);
 
 private:
     QComboBox * choose;        //选择查询目标
@@ -53,13 +58,17 @@ private:
     QTabWidget * userWidget;         //显示用户界面
     QTabWidget * rootWidget;         //显示管理员界面
     QCheckBox * checkbox;            //是否从当前目录查询
-    QPushButton * resetButton;         //重置按钮
+    QPushButton * resetButton;        //重置按钮
     QPushButton * addCurrBook;       //增加当前书
     QPushButton * addNewBook;        //增加新书
     QPushButton * delBook;           //删除书
     QPushButton * retBook;           //还书
     QPushButton * losBook;           //丢失书
+    QPushButton * addPerson;         //增加用户
     QPushButton * delPerson;         //删除用户
+    QPushButton * lendBook;          //借书
+    Dialog * addUser;                //输入添加的用户的信息
+    Dialog * borrowBook;             //输入添加的借书信息
 
     QString username;
     QString password;

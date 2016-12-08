@@ -70,7 +70,7 @@ void DbDemoFileOperate::FileWrite(char *demo,int pos,bool ok)      //写入第po
     if(pos==-1){
         file.seekp(sizeof(int)*(colnum+4)+file_num*col[colnum],ios::beg);
         file.write(aim,col[colnum]);
-        file.seekp(-col[colnum],ios::end);
+        file.seekp(-col[colnum],ios::cur);
         if(!ok){
             file.write((char *)(&currId),sizeof(int));
             /*
@@ -90,11 +90,6 @@ void DbDemoFileOperate::FileWrite(char *demo,int pos,bool ok)      //写入第po
 void DbDemoFileOperate::Query(char *aim, int column, char *road)
 {
     fstream cache;
-    /*
-    if(ok)
-        cache.open("./1.dat", ios::out|ios::binary);
-    else cache.open("./2.dat", ios::out|ios::binary);
-    */
     int nnum=0;
     cache.open(road,ios::out|ios::binary);
     cache.write((char*)(&nnum),sizeof(int));
@@ -289,6 +284,11 @@ int DbDemoFileOperate::Getsiz(int col_num){
 int DbDemoFileOperate::Getst(int col_num){
     if(col_num>colnum||col_num<=0)return 0;
     return col[col_num-1];
+}
+
+DbDemoFileOperate::~DbDemoFileOperate()
+{
+    file.close();
 }
 
 bool Getmulti(DbDemoFileOperate *f1, int from, DbDemoFileOperate *f2, int tar, char *file3){

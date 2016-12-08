@@ -17,10 +17,13 @@ Widget::Widget(QWidget *parent) :
     resetButton(new QPushButton("重置搜索结果", this)),
     addCurrBook(new QPushButton("添加选中书", this)), addNewBook(new QPushButton("添加新书", this)),
     delBook(new QPushButton("删除书", this)), retBook(new QPushButton("还书", this)),
-    losBook(new QPushButton("书丢失", this)), delPerson(new QPushButton("删除用户", this))
+    losBook(new QPushButton("书丢失", this)), addPerson(new QPushButton("添加用户", this)),
+    delPerson(new QPushButton("删除用户", this)), lendBook(new QPushButton("借书", this))
 {
     setMaximumSize(780,500);
     setMinimumSize(780,500);
+
+    createDialog();
 
     resetButton->setGeometry(680, 200, 80, 30);
     addCurrBook->setGeometry(680, 250, 80, 30);
@@ -33,8 +36,12 @@ Widget::Widget(QWidget *parent) :
     retBook->hide();
     losBook->setGeometry(680, 300, 80, 30);
     losBook->hide();
-    delPerson->setGeometry(680, 350, 80, 30);
+    addPerson->setGeometry(680, 250, 80, 30);
+    addPerson->hide();
+    delPerson->setGeometry(680, 300, 80, 30);
     delPerson->hide();
+    lendBook->setGeometry(680, 450, 80, 30);
+    lendBook->hide();
 
     id = Empty;
     ope_aim = Book;
@@ -69,8 +76,33 @@ Widget::Widget(QWidget *parent) :
     connect(rootWidget,SIGNAL(currentChanged(int)),this,SLOT(chooseChange(int)));
     connect(resetButton,SIGNAL(clicked(bool)),this,SLOT(initResult()));
     connect(retBook,SIGNAL(clicked(bool)),this,SLOT(returnBook()));
+    connect(addPerson,SIGNAL(clicked(bool)),addUser,SLOT(exec()));
+    connect(addUser,SIGNAL(submit(QList<QString>)),this,SLOT(addUsers(QList<QString>)));
+    connect(delPerson,SIGNAL(clicked(bool)),this,SLOT(deleteUser()));
+    connect(lendBook,SIGNAL(clicked(bool)),borrowBook,SLOT(exec()));
+    connect(borrowBook,SIGNAL(submit(QList<QString>)),this,SLOT(addBorrow(QList<QString>)));
     initResult(0);
     chooseChange();
+}
+
+void Widget::createDialog()
+{
+    int inputNum = 8;
+    vector<string> shows;
+    shows.push_back("学号");
+    shows.push_back("密码");
+    shows.push_back("姓名");
+    shows.push_back("性别");
+    shows.push_back("邮箱");
+    shows.push_back("电话");
+    shows.push_back("年龄");
+    shows.push_back("生日");
+    addUser = new Dialog(inputNum,shows);
+    shows.clear();
+    inputNum = 2;
+    shows.push_back("用户id");
+    shows.push_back("图书id");
+    borrowBook = new Dialog(inputNum,shows);
 }
 
 void Widget::createShowResult()
@@ -400,6 +432,7 @@ void Widget::login_success(QString username, QString password, int num, Identify
         createUserWidget();
     else
     {
+        lendBook->show();
         createRootWidget();
         initResult(2);
     }
@@ -410,6 +443,7 @@ void Widget::logout()
 {
     showName->hide();
     lot->hide();
+    lendBook->hide();
     log->show();
     if(id == User)
     {
@@ -429,6 +463,7 @@ void Widget::logout()
         retBook->hide();
         losBook->hide();
         delPerson->hide();
+        addPerson->hide();
     }
     showResults[0]->setParent(this);
     showResults[0]->setGeometry(60, 170, 580, 300);
@@ -525,6 +560,7 @@ void Widget::chooseChange(int index)
             retBook->hide();
             losBook->hide();
             delPerson->hide();
+            addPerson->hide();
         }
         ope_aim = Book;
         choose->addItem("作者");
@@ -545,6 +581,7 @@ void Widget::chooseChange(int index)
             retBook->show();
             losBook->show();
             delPerson->hide();
+            addPerson->hide();
         }
     }
     else if(index == 2)
@@ -557,6 +594,7 @@ void Widget::chooseChange(int index)
             retBook->hide();
             losBook->hide();
             delPerson->show();
+            addPerson->show();
         }
         ope_aim = Person;
         choose->addItem("姓名");
@@ -592,7 +630,7 @@ void Widget::returnBook()
     }
     Borrows * borrow = new Borrows(file[ope_aim]->Gettmp_sto());
     int bookcopyid = borrow->GetbookId();
-    DbDemoFileOperate * cache =new DbDemoFileOperate("./bookcopy/bookcopy.dat");
+    DbDemoFileOperate * cache =new DbDemoFileOperate((char *)"./bookcopy/bookcopy.dat");
     if(!cache->Getbyid(bookcopyid))
     {
         QMessageBox::warning(this,"还书失败","未搜索到该书,请检查数据库");
@@ -601,7 +639,7 @@ void Widget::returnBook()
     Bookcopy * bookcopy = new Bookcopy(cache->Gettmp_sto());
     bookcopy->Setlend(0);
     int bookid = bookcopy->Getbookid();
-    DbDemoFileOperate * cache2 =new DbDemoFileOperate("./books/books.dat");
+    DbDemoFileOperate * cache2 =new DbDemoFileOperate((char *)"./books/books.dat");
     if(!cache2->Getbyid(bookid))
     {
         QMessageBox::warning(this,"还书失败","未搜索到该书信息,请检查数据库");
@@ -614,12 +652,104 @@ void Widget::returnBook()
     cache2->Getbyid(bookid);
     delete cache;
     delete cache2;
-    cache = new DbDemoFileOperate("./borrows/borrows.dat");
+    cache = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
     cache->Deletbyid(show_id[ope_aim][ans]);
     delete cache;
     initResult(Borrow);
     initResult(Book);
     QMessageBox::warning(this,"还书成功","成功还书");
+}
+
+void Widget::deleteUser()
+{
+    int ans = showResults[ope_aim]->table->currentRow();
+    if(ans == -1)
+    {
+        QMessageBox::warning(this,"删除用户失败","请先选中要删除的用户");
+        return;
+    }
+    int studentId = show_id[ope_aim][ans];
+    DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
+    cache->Query((char *)(&studentId),2,(char *)"./borrows/3.dat");
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./borrows/3.dat");
+    if(cache->GetCount())
+    {
+        delete cache;
+        QMessageBox::warning(this,"删除用户失败","该用户还有图书未归还,请先清空该用户的借阅记录");
+        return;
+    }
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./persons/persons.dat");
+    cache->Deletbyid(studentId);
+    delete cache;
+    initResult();
+    QMessageBox::warning(this,"删除成功","成功删除该用户");
+}
+
+void Widget::addUsers(QList<QString> list)
+{
+    Persons * person = new Persons(1, list.at(0), list.at(1), list.at(2), list.at(3)==QString("男"),
+        list.at(4), list.at(5), list.at(6).toInt(), QDate::fromString(list.at(7)));
+    DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./persons/persons.dat");
+    cache->Query(person->Getaccount(),2,(char *)"./persons/3.dat");
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./persons/3.dat");
+    if(cache->GetCount())
+    {
+        delete cache;
+        QMessageBox::warning(this,"添加用户失败","该帐号已存在!");
+        return;
+    }
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./persons/persons.dat");
+    cache->FileWrite(person->Getmy_cache());
+    delete cache;
+    initResult();
+    QMessageBox::warning(this,"添加用户成功","已成功添加该用户");
+}
+
+void Widget::addBorrow(QList<QString> list)
+{
+    DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./persons/persons.dat");
+    if(!cache->Getbyid(list.at(0).toInt()))
+    {
+        delete cache;
+        QMessageBox::warning(this,"借书失败","没有对应的用户");
+        return;
+    }
+    Persons * persons = new Persons(cache->Gettmp_sto());
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./bookcopy/bookcopy.dat");
+    if(!cache->Getbyid(list.at(1).toInt()))
+    {
+        delete cache;
+        QMessageBox::warning(this,"借书失败","没有对应的书");
+        return;
+    }
+    Bookcopy * bookcopy = new Bookcopy(cache->Gettmp_sto());
+    if(bookcopy->Getlend())
+    {
+        delete cache;
+        QMessageBox::warning(this,"借书失败","该图书已借出");
+        return;
+    }
+    bookcopy->Setlend(1);
+    cache->Changebyid(list.at(1).toInt(),bookcopy->Getmy_cache());
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./books/books.dat");
+    cache->Getbyid(bookcopy->Getbookid());
+    Books * book = new Books(cache->Gettmp_sto());
+    book->Setleft(book->Getleft()-1);
+    cache->Changebyid(book->GetId(),book->Getmy_cache());
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
+    Borrows * borrow = new Borrows(1, list.at(0).toInt(), list.at(1).toInt(), QDate::currentDate(), 1, QDate::currentDate(), 0);
+    cache->FileWrite(borrow->Getmy_cache(),-1);
+    delete cache;
+    initResult(Book);
+    initResult(Borrow);
+    QMessageBox::warning(this,"借书成功",QString("用户%1成功借出图书%2").arg(persons->Getname()).arg(book->Getname()));
 }
 
 Widget::~Widget()

@@ -9,6 +9,7 @@
 #include "../oucLibrary/widget.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
+#include <QtCore/QList>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'widget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
@@ -19,8 +20,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Widget_t {
-    QByteArrayData data[16];
-    char stringdata0[126];
+    QByteArrayData data[21];
+    char stringdata0[176];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,13 +45,19 @@ QT_MOC_LITERAL(11, 79, 6), // "logout"
 QT_MOC_LITERAL(12, 86, 10), // "showResult"
 QT_MOC_LITERAL(13, 97, 4), // "page"
 QT_MOC_LITERAL(14, 102, 12), // "chooseChange"
-QT_MOC_LITERAL(15, 115, 10) // "returnBook"
+QT_MOC_LITERAL(15, 115, 10), // "returnBook"
+QT_MOC_LITERAL(16, 126, 10), // "deleteUser"
+QT_MOC_LITERAL(17, 137, 8), // "addUsers"
+QT_MOC_LITERAL(18, 146, 14), // "QList<QString>"
+QT_MOC_LITERAL(19, 161, 4), // "list"
+QT_MOC_LITERAL(20, 166, 9) // "addBorrow"
 
     },
     "Widget\0initResult\0\0index\0query\0"
     "login_success\0username\0password\0num\0"
     "Identify\0id\0logout\0showResult\0page\0"
-    "chooseChange\0returnBook"
+    "chooseChange\0returnBook\0deleteUser\0"
+    "addUsers\0QList<QString>\0list\0addBorrow"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,7 +67,7 @@ static const uint qt_meta_data_Widget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -68,16 +75,19 @@ static const uint qt_meta_data_Widget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   64,    2, 0x09 /* Protected */,
-       1,    0,   67,    2, 0x29 /* Protected | MethodCloned */,
-       4,    0,   68,    2, 0x09 /* Protected */,
-       5,    4,   69,    2, 0x09 /* Protected */,
-      11,    0,   78,    2, 0x09 /* Protected */,
-      12,    1,   79,    2, 0x09 /* Protected */,
-      12,    0,   82,    2, 0x29 /* Protected | MethodCloned */,
-      14,    1,   83,    2, 0x09 /* Protected */,
-      14,    0,   86,    2, 0x29 /* Protected | MethodCloned */,
-      15,    0,   87,    2, 0x09 /* Protected */,
+       1,    1,   79,    2, 0x09 /* Protected */,
+       1,    0,   82,    2, 0x29 /* Protected | MethodCloned */,
+       4,    0,   83,    2, 0x09 /* Protected */,
+       5,    4,   84,    2, 0x09 /* Protected */,
+      11,    0,   93,    2, 0x09 /* Protected */,
+      12,    1,   94,    2, 0x09 /* Protected */,
+      12,    0,   97,    2, 0x29 /* Protected | MethodCloned */,
+      14,    1,   98,    2, 0x09 /* Protected */,
+      14,    0,  101,    2, 0x29 /* Protected | MethodCloned */,
+      15,    0,  102,    2, 0x09 /* Protected */,
+      16,    0,  103,    2, 0x09 /* Protected */,
+      17,    1,  104,    2, 0x09 /* Protected */,
+      20,    1,  107,    2, 0x09 /* Protected */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -90,6 +100,9 @@ static const uint qt_meta_data_Widget[] = {
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 18,   19,
+    QMetaType::Void, 0x80000000 | 18,   19,
 
        0        // eod
 };
@@ -110,7 +123,28 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 7: _t->chooseChange((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 8: _t->chooseChange(); break;
         case 9: _t->returnBook(); break;
+        case 10: _t->deleteUser(); break;
+        case 11: _t->addUsers((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
+        case 12: _t->addBorrow((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
         default: ;
+        }
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        switch (_id) {
+        default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+        case 11:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 0:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QList<QString> >(); break;
+            }
+            break;
+        case 12:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 0:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QList<QString> >(); break;
+            }
+            break;
         }
     }
 }
@@ -140,13 +174,13 @@ int Widget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
-            *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 10;
+        if (_id < 13)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 13;
     }
     return _id;
 }
