@@ -21,6 +21,9 @@ Widget::Widget(QWidget *parent) :
     delPerson(new QPushButton("删除用户", this)), lendBook(new QPushButton("借书", this)),
     changeBook(new QPushButton("修改图书", this)), lendAgain(new QPushButton("续借", this))
 {
+    DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
+    qDebug() << cache->GetCount();
+    delete cache;
     setMaximumSize(800, 500);
     setMinimumSize(800, 500);
     createDialog();
@@ -734,16 +737,33 @@ void Widget::deleteUser()
     cache->Query((char *)(&studentId),2,(char *)"./borrows/3.dat");
     delete cache;
     cache = new DbDemoFileOperate((char *)"./borrows/3.dat");
-    if(cache->GetCount())
+    for(int i=1; i<=cache->GetCount(); i++)
     {
-        delete cache;
-        QMessageBox::warning(this,"删除用户失败","该用户还有图书未归还,请先清空该用户的借阅记录");
-        return;
+        cache->Getbynum(i);
+        Borrows * borrows = new Borrows(cache->Gettmp_sto());
+        if(!borrows->GetifReturn())
+        {
+            delete borrows;
+            delete cache;
+            QMessageBox::warning(this,"删除用户失败","该用户还有图书未归还,请先清空该用户的借阅记录");
+            return;
+        }
+        delete borrows;
     }
+    DbDemoFileOperate * cache2 = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
+    for(int i=1; i<=cache->GetCount(); i++)
+    {
+        cache->Getbynum(i);
+        Borrows * borrows = new Borrows(cache->Gettmp_sto());
+        cache2->Deletbyid(borrows->GetId());
+        delete borrows;
+    }
+    delete cache2;
     delete cache;
     cache = new DbDemoFileOperate((char *)"./persons/persons.dat");
     cache->Deletbyid(studentId);
     delete cache;
+    initResult(Borrow);
     initResult();
     QMessageBox::warning(this,"删除成功","成功删除该用户");
 }
