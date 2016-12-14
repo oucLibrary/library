@@ -519,7 +519,10 @@ void Widget::showResult(int page)
             Borrows * borrow = new Borrows(file[index]->PrintFile(i+1+20*(page-1),1));
             show_id[index].push_back(borrow->GetId());
             showResults[index]->table->setItem(i,4,new QTableWidgetItem(borrow->GetfirstTime().toString("yyyy-MM-dd")));
-            showResults[index]->table->setItem(i,5,new QTableWidgetItem(borrow->GetlastTime().toString("yyyy-MM-dd")));
+            if(!borrow->GetifReturn())
+                showResults[index]->table->setItem(i,5,new QTableWidgetItem(borrow->GetlastTime().toString("yyyy-MM-dd")));
+            else
+                showResults[index]->table->setItem(i,5,new QTableWidgetItem(borrow->GetlastTime().toString("yyyy-MM-dd")+QString("(已归还)")));
             DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./bookcopy/bookcopy.dat");
             if(!cache->Getbyid(borrow->GetbookId()))
             {
@@ -676,6 +679,11 @@ void Widget::returnBook()
         return;
     }
     Borrows * borrow = new Borrows(file[ope_aim]->Gettmp_sto());
+    if(borrow->GetifReturn())
+    {
+        QMessageBox::warning(this,"还书失败","该图书已归还");
+        return;
+    }
     int bookcopyid = borrow->GetbookId();
     DbDemoFileOperate * cache =new DbDemoFileOperate((char *)"./bookcopy/bookcopy.dat");
     if(!cache->Getbyid(bookcopyid))
@@ -702,7 +710,10 @@ void Widget::returnBook()
     delete cache;
     delete cache2;
     cache = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
-    cache->Deletbyid(show_id[ope_aim][ans]);
+    borrow->SetifReturn(1);
+    borrow->SetifLend(0);
+    borrow->SetlastTime(QDate::currentDate());
+    cache->Changebyid(borrow->GetId(),borrow->Getmy_cache());
     delete cache;
     initResult(Borrow);
     initResult(Book);
