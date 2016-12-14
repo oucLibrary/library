@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     tablewidget.cpp \
     PageWidget.cpp \
     changeperson.cpp \
-    dialog.cpp
+    dialog.cpp \
+    test.cpp
 
 HEADERS  += widget.h \
     dbdemo.h \
@@ -29,8 +30,10 @@ HEADERS  += widget.h \
     tablewidget.h \
     pagewidget.h \
     changeperson.h \
-    dialog.h
+    dialog.h \
+    test.h
 
 FORMS    += \
     PageWidget.ui \
-    changeperson.ui
+    changeperson.ui \
+    test.ui

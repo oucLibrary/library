@@ -24,6 +24,9 @@ DbDemoFileOperate::DbDemoFileOperate(){
 }
 DbDemoFileOperate::DbDemoFileOperate(char *fileName)
 {
+    this->fileName = new char[strlen(fileName)];
+    for(int i=0; i<strlen(fileName); i++)
+        this->fileName[i] = fileName[i];
     file.open(fileName, ios::ate|ios::in|ios::out);
     if(!file.is_open())
     {
@@ -49,11 +52,13 @@ void DbDemoFileOperate::SetcurrId(int tid){
     currId=tid;
     file.seekp(sizeof(int),ios::beg);
     file.write((char*)(&tid),sizeof(int));
+    reOpen();
 }
 void DbDemoFileOperate::Setfile_num(int tnum){
     file_num=tnum;
     file.seekp(0,ios::beg);
     file.write((char*)(&tnum),sizeof(int));
+    reOpen();
 }
 int DbDemoFileOperate::Getfile_num(){
     return file_num;
@@ -86,6 +91,7 @@ void DbDemoFileOperate::FileWrite(char *demo,int pos,bool ok)      //写入第po
         file.seekp(sizeof(int)*(colnum+4)+pos*col[colnum],ios::beg);
         file.write(aim,col[colnum]);
     }
+    reOpen();
 }
 void DbDemoFileOperate::Query(char *aim, int column, char *road)
 {
@@ -126,6 +132,8 @@ void DbDemoFileOperate::Query(char *aim, int column, char *road)
     }
     cache.seekp(0,ios::beg);
     cache.write((char*)(&nnum),sizeof(int));
+    cache.close();
+    reOpen();
 }
 char* DbDemoFileOperate::PrintFile(int pageNum, int printNum)
 {
@@ -238,6 +246,7 @@ bool DbDemoFileOperate::Changebyid(int tid,char *tmp){
         if(*((int*)buff)==tid){
             file.seekp(sizeof(int)*(colnum+4)+(i-1)*col[colnum],ios::beg);
             file.write(tmp,col[colnum]);
+            reOpen();
             return true;
         }
     }
@@ -257,6 +266,7 @@ bool DbDemoFileOperate::Deletbyid(int tid){
             file.seekp(((int)file.tellg())-col[colnum],ios::beg);
             file.write(tar,col[colnum]);
             Setfile_num(file_num-1);
+            reOpen();
             return true;
         }
     }
@@ -284,6 +294,17 @@ int DbDemoFileOperate::Getsiz(int col_num){
 int DbDemoFileOperate::Getst(int col_num){
     if(col_num>colnum||col_num<=0)return 0;
     return col[col_num-1];
+}
+
+int DbDemoFileOperate::GetcurrId()
+{
+    return currId;
+}
+
+void DbDemoFileOperate::reOpen()
+{
+    file.close();
+    file.open(fileName, ios::ate|ios::in|ios::out);
 }
 
 DbDemoFileOperate::~DbDemoFileOperate()
@@ -314,6 +335,7 @@ bool Getmulti(DbDemoFileOperate *f1, int from, DbDemoFileOperate *f2, int tar, c
                 else{
                     DbDemoFileOperate f3(file3);
                     f3.FileWrite(f2->Gettmp_sto(),-1,1);
+                    f3.~DbDemoFileOperate();
                 }
             }
         }

@@ -34,11 +34,14 @@ public:
     bool Getbynum(int tnum);         //返回文件的第tnum条记录，如果tnum大于文件记录数返回false
     int Getsiz(int col_num);         //返回记录第col_num列的大小，如果col_num大于文件列数返回0
     int Getst(int col_num);          //返回第col_num的起始相对地址，如果col_num大于文件列数返回-1
+    int GetcurrId();
+    void reOpen();                   //重新打开文件,从而保证写入缓存
     ~DbDemoFileOperate();
 private:
     void Setfile_num(int tid);       //重设文件记录的条数，涉及文件操作
     void SetcurrId(int tid);         //重设当前Id自增，涉及文件操作
     fstream file;
+    char * fileName;
     char * aim;
     char *tmp_sto;          //存储按照id查询结果的一条记录的缓存
     int file_num;           //记录的条数

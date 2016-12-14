@@ -30,7 +30,10 @@ private:
     QPushButton * confirm;
     QPushButton * cancel;
     QComboBox * sex;
+    QComboBox * bookId;
     QDateEdit * birth;
+
+    int ok;           //输入目录里面输入图书id是第几条
 };
 
 #endif // DIALOG_H
