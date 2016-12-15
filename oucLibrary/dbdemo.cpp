@@ -325,9 +325,9 @@ bool Getmulti(DbDemoFileOperate *f1, int from, DbDemoFileOperate *f2, int tar, c
                     f2->Query(f2->Gettmp_sto(),1,file3);
                 }
                 else{
-                    DbDemoFileOperate f3(file3);
-                    f3.FileWrite(f2->Gettmp_sto(),-1,1);
-                    f3.reOpen();
+                    DbDemoFileOperate * f3 = new DbDemoFileOperate(file3);
+                    f3->FileWrite(f2->Gettmp_sto(),-1,1);
+                    delete f3;
                 }
             }
         }
