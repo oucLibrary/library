@@ -21,7 +21,7 @@ Widget::Widget(QWidget *parent) :
     delPerson(new QPushButton("删除用户", this)), lendBook(new QPushButton("借书", this)),
     changeBook(new QPushButton("修改图书", this)), lendAgain(new QPushButton("续借", this))
 {
-    DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./bookcopy/bookcopy.dat");
+    /*DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./bookcopy/bookcopy.dat");
     DbDemoFileOperate * cache2 = new DbDemoFileOperate((char *)"./books/books.dat");
     for(int i=1; i<=cache->GetCount(); i++)
     {
@@ -35,7 +35,7 @@ Widget::Widget(QWidget *parent) :
     }
     qDebug() << cache->GetCount();
     delete cache;
-    delete cache2;
+    delete cache2;*/
     setMaximumSize(800, 500);
     setMinimumSize(800, 500);
     createDialog();
@@ -631,7 +631,7 @@ void Widget::chooseChange(int index)
             lendBook->hide();
             delBook->hide();
             retBook->show();
-            losBook->show();
+            losBook->hide();
             delPerson->hide();
             changeBook->hide();
             addPerson->hide();

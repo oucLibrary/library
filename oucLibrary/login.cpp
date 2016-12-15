@@ -30,6 +30,7 @@ Login::Login(QWidget * parent) : QWidget(parent), showname(new QLabel(this)), sh
 
     reg->setGeometry(210, 150, 120, 30);
     reg->setText("注册");
+    reg->hide();
     connect(reg, SIGNAL(clicked(bool)), this, SLOT(hide()));
     connect(reg, SIGNAL(clicked(bool)), regist, SLOT(show()));
 

@@ -327,7 +327,7 @@ bool Getmulti(DbDemoFileOperate *f1, int from, DbDemoFileOperate *f2, int tar, c
                 else{
                     DbDemoFileOperate f3(file3);
                     f3.FileWrite(f2->Gettmp_sto(),-1,1);
-                    f3.~DbDemoFileOperate();
+                    f3.reOpen();
                 }
             }
         }
