@@ -66,11 +66,6 @@ int DbDemoFileOperate::Getfile_num(){
 
 void DbDemoFileOperate::FileWrite(char *demo,int pos,bool ok)      //写入第pos条文件,默认写入文件末尾
 {
-    //if(pos == -1)
-      //  file.seekp(0, ios::end);
-    //else
-      //  file.seekp(pos*fileLen+2*sizeof(int), ios::beg);
-    //file.write((char *)(demo),fileLen);
     char *aim=(char *)demo;
     if(pos==-1){
         file.seekp(sizeof(int)*(colnum+4)+file_num*col[colnum],ios::beg);
@@ -78,11 +73,6 @@ void DbDemoFileOperate::FileWrite(char *demo,int pos,bool ok)      //写入第po
         file.seekp(-col[colnum],ios::cur);
         if(!ok){
             file.write((char *)(&currId),sizeof(int));
-            /*
-            currId++;
-            file.seekp(0,ios::beg);
-            file.write((char *)(&currId),sizeof(int));
-            */
             SetcurrId(currId+1);
         }
         Setfile_num(file_num+1);
@@ -303,6 +293,8 @@ int DbDemoFileOperate::GetcurrId()
 
 void DbDemoFileOperate::reOpen()
 {
+    file.close();
+    file.open(fileName, ios::ate|ios::in|ios::out);
     file.close();
     file.open(fileName, ios::ate|ios::in|ios::out);
 }
