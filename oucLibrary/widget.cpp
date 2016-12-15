@@ -21,9 +21,6 @@ Widget::Widget(QWidget *parent) :
     delPerson(new QPushButton("删除用户", this)), lendBook(new QPushButton("借书", this)),
     changeBook(new QPushButton("修改图书", this)), lendAgain(new QPushButton("续借", this))
 {
-    DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./borrows/borrows.dat");
-    qDebug() << cache->GetCount();
-    delete cache;
     setMaximumSize(800, 500);
     setMinimumSize(800, 500);
     createDialog();
@@ -783,6 +780,17 @@ void Widget::addUsers(QList<QString> list)
         return;
     }
     delete cache;
+    cache = new DbDemoFileOperate((char *)"./admins/admins.dat");
+    cache->Query(person->Getaccount(),2,(char *)"./admins/3.dat");
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./admins/3.dat");
+    if(cache->GetCount())
+    {
+        delete cache;
+        QMessageBox::warning(this,"添加用户失败","该账户已存在!");
+        return;
+    }
+    delete cache;
     cache = new DbDemoFileOperate((char *)"./persons/persons.dat");
     cache->FileWrite(person->Getmy_cache());
     delete cache;
@@ -831,6 +839,17 @@ void Widget::addNewBooks(QList<QString> list)
     }
     DbDemoFileOperate *addbookfile;
     addbookfile=new DbDemoFileOperate((char *)"./books/books.dat");
+    addbookfile->Query(new_book.Getisbn(),7,(char *)"./books/3.dat");
+    delete addbookfile;
+    addbookfile = new DbDemoFileOperate((char *)"./books/3.dat");
+    if(addbookfile->GetCount())
+    {
+        delete addbookfile;
+        QMessageBox::warning(this,"添加失败","该isbn号已经有对应的书了!");
+        return;
+    }
+    delete addbookfile;
+    addbookfile = new DbDemoFileOperate((char *)"./books/books.dat");
     addbookfile->FileWrite(new_book.Getmy_cache(),-1,false);
     int c_id=addbookfile->GetcurrId()-1;
     delete addbookfile;
