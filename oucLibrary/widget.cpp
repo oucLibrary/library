@@ -959,6 +959,18 @@ void Widget::changeBooks()
     book->Setauthor(list.at(2));
     book->Setpress(list.at(3));
     DbDemoFileOperate * cache = new DbDemoFileOperate((char *)"./books/books.dat");
+    cache->Query(book->Getisbn(),7,(char *)"./books/3.dat");
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./books/3.dat");
+    if(cache->GetCount())
+    {
+        delete cache;
+        QMessageBox::warning(this,"修改失败","该isbn号已经有书了,无法修改");
+        initResult();
+        return;
+    }
+    delete cache;
+    cache = new DbDemoFileOperate((char *)"./books/books.dat");
     cache->Changebyid(id,book->Getmy_cache());
     delete cache;
     QMessageBox::warning(this,"修改成功","成功修改当前图书");
