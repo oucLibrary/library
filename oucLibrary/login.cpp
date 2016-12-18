@@ -6,7 +6,7 @@
 #include <QDebug>
 
 Login::Login(QWidget * parent) : QWidget(parent), showname(new QLabel(this)), showpass(new QLabel(this)),
-    username(new QLineEdit("pgfxwkcaucb",this)), password(new QLineEdit("813072",this)), log(new QPushButton(this)), reg(new QPushButton(this)),
+    username(new QLineEdit("admin",this)), password(new QLineEdit("admin",this)), log(new QPushButton(this)), reg(new QPushButton(this)),
     regist(new Register())
 {
     setWindowModality(Qt::ApplicationModal);

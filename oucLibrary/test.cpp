@@ -135,14 +135,12 @@ void test::on_confirm_clicked()
     if(ui->c_phone->isChecked())me->Setphone(ui->phone->text());
     if(ui->c_sex->isChecked())me->Setsex(ui->sex->currentIndex());
     tmp->Changebyid(me->GetId(),me->Getmy_cache());
-    delete tmp;
-    delete me;
-    deleteThis();
+    hide();
 }
 
 void test::on_cancel_clicked()
 {
-    deleteThis();
+    hide();
 }
 
 void test::deleteThis()

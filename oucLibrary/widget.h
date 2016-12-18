@@ -42,15 +42,16 @@ protected slots:
     void chooseChange(int index = 0);
     void returnBook();
     void deleteUser();
-    void addUsers(QList<QString> list);
+    bool addUsers(QList<QString> list, bool warn = true);
     void addBorrow();
-    void addNewBooks(QList<QString> list);
+    bool addNewBooks(QList<QString> list, bool warn = true);
     void addCurrBooks(QList<QString> list);
     void delBooks();
     void changeBooks();
     void addBorrows(QList<QString>list);
     void deleteBook(QList<QString>list);
     void lendAgain2();
+    void inputFromFile();
 
 private:
     QComboBox * choose;        //选择查询目标
@@ -77,6 +78,7 @@ private:
     QPushButton * lendBook;          //借书
     QPushButton * changeBook;        //修改书
     QPushButton * lendAgain;         //续借
+    QPushButton * chooseFile;     //从文件导入
     Dialog * addUser;                //输入添加的用户的信息
     Dialog * borrowBook;             //输入添加的借书信息
     Dialog * newBook;                //新书信息

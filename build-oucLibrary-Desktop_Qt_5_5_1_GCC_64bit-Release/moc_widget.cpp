@@ -20,8 +20,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Widget_t {
-    QByteArrayData data[28];
-    char stringdata0[255];
+    QByteArrayData data[30];
+    char stringdata0[274];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -50,24 +50,26 @@ QT_MOC_LITERAL(16, 126, 10), // "deleteUser"
 QT_MOC_LITERAL(17, 137, 8), // "addUsers"
 QT_MOC_LITERAL(18, 146, 14), // "QList<QString>"
 QT_MOC_LITERAL(19, 161, 4), // "list"
-QT_MOC_LITERAL(20, 166, 9), // "addBorrow"
-QT_MOC_LITERAL(21, 176, 11), // "addNewBooks"
-QT_MOC_LITERAL(22, 188, 12), // "addCurrBooks"
-QT_MOC_LITERAL(23, 201, 8), // "delBooks"
-QT_MOC_LITERAL(24, 210, 11), // "changeBooks"
-QT_MOC_LITERAL(25, 222, 10), // "addBorrows"
-QT_MOC_LITERAL(26, 233, 10), // "deleteBook"
-QT_MOC_LITERAL(27, 244, 10) // "lendAgain2"
+QT_MOC_LITERAL(20, 166, 4), // "warn"
+QT_MOC_LITERAL(21, 171, 9), // "addBorrow"
+QT_MOC_LITERAL(22, 181, 11), // "addNewBooks"
+QT_MOC_LITERAL(23, 193, 12), // "addCurrBooks"
+QT_MOC_LITERAL(24, 206, 8), // "delBooks"
+QT_MOC_LITERAL(25, 215, 11), // "changeBooks"
+QT_MOC_LITERAL(26, 227, 10), // "addBorrows"
+QT_MOC_LITERAL(27, 238, 10), // "deleteBook"
+QT_MOC_LITERAL(28, 249, 10), // "lendAgain2"
+QT_MOC_LITERAL(29, 260, 13) // "inputFromFile"
 
     },
     "Widget\0initResult\0\0index\0query\0"
     "login_success\0username\0password\0num\0"
     "Identify\0id\0logout\0showResult\0page\0"
     "chooseChange\0returnBook\0deleteUser\0"
-    "addUsers\0QList<QString>\0list\0addBorrow\0"
-    "addNewBooks\0addCurrBooks\0delBooks\0"
-    "changeBooks\0addBorrows\0deleteBook\0"
-    "lendAgain2"
+    "addUsers\0QList<QString>\0list\0warn\0"
+    "addBorrow\0addNewBooks\0addCurrBooks\0"
+    "delBooks\0changeBooks\0addBorrows\0"
+    "deleteBook\0lendAgain2\0inputFromFile"
 };
 #undef QT_MOC_LITERAL
 
@@ -77,7 +79,7 @@ static const uint qt_meta_data_Widget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      20,   14, // methods
+      23,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -85,26 +87,29 @@ static const uint qt_meta_data_Widget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,  114,    2, 0x09 /* Protected */,
-       1,    0,  117,    2, 0x29 /* Protected | MethodCloned */,
-       4,    0,  118,    2, 0x09 /* Protected */,
-       5,    4,  119,    2, 0x09 /* Protected */,
-      11,    0,  128,    2, 0x09 /* Protected */,
-      12,    1,  129,    2, 0x09 /* Protected */,
-      12,    0,  132,    2, 0x29 /* Protected | MethodCloned */,
-      14,    1,  133,    2, 0x09 /* Protected */,
-      14,    0,  136,    2, 0x29 /* Protected | MethodCloned */,
-      15,    0,  137,    2, 0x09 /* Protected */,
-      16,    0,  138,    2, 0x09 /* Protected */,
-      17,    1,  139,    2, 0x09 /* Protected */,
-      20,    0,  142,    2, 0x09 /* Protected */,
-      21,    1,  143,    2, 0x09 /* Protected */,
-      22,    1,  146,    2, 0x09 /* Protected */,
-      23,    0,  149,    2, 0x09 /* Protected */,
-      24,    0,  150,    2, 0x09 /* Protected */,
-      25,    1,  151,    2, 0x09 /* Protected */,
-      26,    1,  154,    2, 0x09 /* Protected */,
-      27,    0,  157,    2, 0x09 /* Protected */,
+       1,    1,  129,    2, 0x09 /* Protected */,
+       1,    0,  132,    2, 0x29 /* Protected | MethodCloned */,
+       4,    0,  133,    2, 0x09 /* Protected */,
+       5,    4,  134,    2, 0x09 /* Protected */,
+      11,    0,  143,    2, 0x09 /* Protected */,
+      12,    1,  144,    2, 0x09 /* Protected */,
+      12,    0,  147,    2, 0x29 /* Protected | MethodCloned */,
+      14,    1,  148,    2, 0x09 /* Protected */,
+      14,    0,  151,    2, 0x29 /* Protected | MethodCloned */,
+      15,    0,  152,    2, 0x09 /* Protected */,
+      16,    0,  153,    2, 0x09 /* Protected */,
+      17,    2,  154,    2, 0x09 /* Protected */,
+      17,    1,  159,    2, 0x29 /* Protected | MethodCloned */,
+      21,    0,  162,    2, 0x09 /* Protected */,
+      22,    2,  163,    2, 0x09 /* Protected */,
+      22,    1,  168,    2, 0x29 /* Protected | MethodCloned */,
+      23,    1,  171,    2, 0x09 /* Protected */,
+      24,    0,  174,    2, 0x09 /* Protected */,
+      25,    0,  175,    2, 0x09 /* Protected */,
+      26,    1,  176,    2, 0x09 /* Protected */,
+      27,    1,  179,    2, 0x09 /* Protected */,
+      28,    0,  182,    2, 0x09 /* Protected */,
+      29,    0,  183,    2, 0x09 /* Protected */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -118,14 +123,17 @@ static const uint qt_meta_data_Widget[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Bool, 0x80000000 | 18, QMetaType::Bool,   19,   20,
+    QMetaType::Bool, 0x80000000 | 18,   19,
+    QMetaType::Void,
+    QMetaType::Bool, 0x80000000 | 18, QMetaType::Bool,   19,   20,
+    QMetaType::Bool, 0x80000000 | 18,   19,
     QMetaType::Void, 0x80000000 | 18,   19,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 18,   19,
     QMetaType::Void, 0x80000000 | 18,   19,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 18,   19,
-    QMetaType::Void, 0x80000000 | 18,   19,
     QMetaType::Void,
 
        0        // eod
@@ -148,15 +156,22 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 8: _t->chooseChange(); break;
         case 9: _t->returnBook(); break;
         case 10: _t->deleteUser(); break;
-        case 11: _t->addUsers((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
-        case 12: _t->addBorrow(); break;
-        case 13: _t->addNewBooks((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
-        case 14: _t->addCurrBooks((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
-        case 15: _t->delBooks(); break;
-        case 16: _t->changeBooks(); break;
-        case 17: _t->addBorrows((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
-        case 18: _t->deleteBook((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
-        case 19: _t->lendAgain2(); break;
+        case 11: { bool _r = _t->addUsers((*reinterpret_cast< QList<QString>(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 12: { bool _r = _t->addUsers((*reinterpret_cast< QList<QString>(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 13: _t->addBorrow(); break;
+        case 14: { bool _r = _t->addNewBooks((*reinterpret_cast< QList<QString>(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 15: { bool _r = _t->addNewBooks((*reinterpret_cast< QList<QString>(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 16: _t->addCurrBooks((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
+        case 17: _t->delBooks(); break;
+        case 18: _t->changeBooks(); break;
+        case 19: _t->addBorrows((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
+        case 20: _t->deleteBook((*reinterpret_cast< QList<QString>(*)>(_a[1]))); break;
+        case 21: _t->lendAgain2(); break;
+        case 22: _t->inputFromFile(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -169,7 +184,7 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
                 *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QList<QString> >(); break;
             }
             break;
-        case 13:
+        case 12:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
@@ -183,14 +198,28 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
                 *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QList<QString> >(); break;
             }
             break;
-        case 17:
+        case 15:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
                 *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QList<QString> >(); break;
             }
             break;
-        case 18:
+        case 16:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 0:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QList<QString> >(); break;
+            }
+            break;
+        case 19:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 0:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QList<QString> >(); break;
+            }
+            break;
+        case 20:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
@@ -226,13 +255,13 @@ int Widget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 20)
+        if (_id < 23)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 20;
+        _id -= 23;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 20)
+        if (_id < 23)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 20;
+        _id -= 23;
     }
     return _id;
 }
