@@ -1908,7 +1908,11 @@ widget.o: ../oucLibrary/widget.cpp ../oucLibrary/widget.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QHeaderView \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qheaderview.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QMessageBox \
-		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qmessagebox.h
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qmessagebox.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QFileDialog \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qfiledialog.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qdir.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qfileinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o widget.o ../oucLibrary/widget.cpp
 
 dbdemo.o: ../oucLibrary/dbdemo.cpp ../oucLibrary/dbdemo.h \
@@ -2936,6 +2940,54 @@ test.o: ../oucLibrary/test.cpp ../oucLibrary/test.h \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/QDate \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qdatetime.h \
 		ui_test.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/QVariant \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QAction \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qaction.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QButtonGroup \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QCheckBox \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qcheckbox.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QComboBox \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qcombobox.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QHeaderView \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qheaderview.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QLineEdit \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qlineedit.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qtextcursor.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qtextformat.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qpen.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtGui/qtextoption.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qpushbutton.h \
+		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QWidget \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/QMessageBox \
 		/opt/Qt5.5.1/5.5/gcc_64/include/QtWidgets/qmessagebox.h
